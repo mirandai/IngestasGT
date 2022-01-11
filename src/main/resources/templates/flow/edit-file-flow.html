@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}">
+<head>
+    <title>Flujo archivo</title>
+</head>
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Flujo archivo</h3>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Crear
+                            <small>flujo de tipo spool</small>
+                        </h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br/>
+
+                        <!--Inicia Mensaje de Alerta-->
+                        <div data-th-if="${message}" data-th-text="${message}"
+                             class="alert alert-danger">
+                        </div>
+
+                        <div data-th-if="${messageValidation}" class="alert alert-danger">
+                            <ul>
+                                <li data-th-each="validation : ${validations}" data-th-text="${validation}">
+                                </li>
+                            </ul>
+                        </div>
+                        <!--Fin mensaje de alerta-->
+
+                        <!--Inicia Formulario-->
+                        <form id="demo-form2" data-parsley-validate
+                              data-th-action="@{/file-flow/edit}"
+                              data-th-object="${flow}"
+                              method="post"
+                              class="form-horizontal form-label-left">
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id">Id
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="id" required="required"
+                                           class="form-control col-md-7 col-xs-12"
+                                           readonly="readonly" name="id" data-th-field="*{id}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nombre
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="name" name="name" placeholder="Nombre del flujo"
+                                           data-th-field="*{name}"
+                                           class="form-control col-md-7 col-xs-12" readonly="readonly">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Descripción
+                                    <span
+                                            class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="description" name="description"
+                                           placeholder="Descripción del flujo"
+                                           data-th-field="*{description}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Pais
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" required="required" name="country"
+                                            data-th-field="*{country}"  data-th-value="${country}">
+
+                                        <option value="0">Choose country</option>
+                                        <option value="GUATEMALA" >GUATEMALA</option>
+                                        <option value="EL SALVADOR" >EL SALVADOR</option>
+                                        <option value="NICARAGUA" >NICARAGUA</option>
+                                        <option value="COSTA RICA" >COSTA RICA</option>
+                                        <option value="PANAMA" >PANAMA</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sourceDirectory">Directorio
+                                    fuente
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="sourceDirectory" name="sourceDirectory"
+                                           placeholder="Nombre del archivo a generar" data-th-field="*{sourceDirectory}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="filename">Nombre de
+                                    archivo
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="filename" name="filename"
+                                           placeholder="Nombre del archivo a generar" data-th-field="*{filename}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Programar ahora
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                    <input type="radio"
+                                           class="uk-radio"
+                                           name="isSchedule"
+                                           id="isSchedule"
+                                           value="yes"
+                                           data-th-field="*{isSchedule}">&nbsp;Si&nbsp;&nbsp;
+                                    <input type="radio"
+                                           class="uk-radio"
+                                           name="isSchedule"
+                                           id="isSchedule"
+                                           value="not"
+                                           data-th-field="*{isSchedule}">&nbsp;No&nbsp;&nbsp;
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblMinute" for="minute">Minutos
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="minute" name="minute"
+                                           placeholder="Minuto a ejecutar proceso ozzie" data-th-field="*{minute}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblHour" for="hour">Hora
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="hour" name="hour"
+                                           placeholder="Hora a ejecutar proceso ozzie" data-th-field="*{hour}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblWeekday" for="weekday">Día
+                                    de la semana
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="weekday" name="weekday"
+                                           placeholder="Día de la semana a ejecutar proceso ozzie"
+                                           data-th-field="*{weekday}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblMonth" for="month">Mes
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="month" name="month"
+                                           placeholder="Mes a ejecutar proceso ozzie" data-th-field="*{month}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblMonthday"
+                                       for="monthday">Día del mes
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="monthday" name="monthday"
+                                           placeholder="Día del mes a ejecutar proceso ozzie"
+                                           data-th-field="*{monthday}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblStartDate">Fecha de
+                                    inicio
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="date" name="startDate" placeholder="Fecha de inicio del proceso"
+                                           data-th-field="*{startDate}"
+                                           class="form-control col-md-7 col-xs-6">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblEndDate">Fecha de
+                                    finalización</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="date" name="endDate" placeholder="Fecha de finalización del proceso"
+                                           data-th-field="*{endDate}"
+                                           class="form-control col-md-7 col-xs-6">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                       for="percentageToleranceRecords"><!--Porcentaje de tolerancia de registros-->
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="percentageToleranceRecords" hidden="true"
+                                           name="percentageToleranceRecords"
+                                           placeholder="Umbral"
+                                           data-th-field="*{percentageToleranceRecords}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"><!--Alertas por correo--></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="checkbox-inline">
+                                        <input class="uk-checkbox" type="checkbox" name="alertByEmail" hidden="true"
+                                               data-th-field="*{alertByEmail}" checked>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Correos</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input id="emails" name="emails"
+                                           placeholder="Correos a enviar notifiación, separados por coma"
+                                           data-th-field="*{emails}" type="text"
+                                           class="tags form-control" value=""/>
+                                    <div id="suggestions-container"
+                                         style="position: relative; float: left; width: 250px; margin: 10px;"></div>
+                                </div>
+                            </div>
+
+                            <!--input type="text" id="algo" name="algo" th:value="${flow.isDirectory}" disabled/-->
+
+                            <!--ul>
+                                <li th:each="radioValue: ${singleSelectAllValues}">
+                                    <input type="radio"
+                                           th:checked="${radioValue == 'yes'}"
+                                           th:field="*{isDirectory}"
+                                           th:value="${radioValue}"/>
+                                    <label
+                                            th:for="${#ids.prev('isDirectory')}"
+                                            th:text="${radioValue}"></label>
+                                </li>
+                            </ul-->
+
+                            <!--th:block th:each="radioValue: ${singleSelectAllValues}">
+                                <input type="radio" th:value="${radioValue}" th:id="${radioValue}"
+                                       th:field="*{isDirectory}"/>
+                                <label th:for="${radioValue}" th:text="${radioValue}"/>
+                            </th:block-->
+
+                            <!--div>
+                                <input type="radio" name="isDirectory" th:field="*{isDirectory}"
+                                       th:value="tabla"
+                                       checked="checked">
+                                <label th:for="${#ids.prev('isDirectory')}">tabla</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="isDirectory" th:field="*{isDirectory}"
+                                       th:value="carpeta"
+                                       checked="">
+                                <label th:for="${#ids.prev('isDirectory')}">carpeta</label>
+                            </div-->
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Destino
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                    <input type="radio"
+                                           class="uk-radio"
+                                           name="isDirectory"
+                                           id="isDirectory"
+                                           value="carpeta"
+                                           data-th-field="*{isDirectory}">&nbsp;Directorio&nbsp;&nbsp;
+                                    <input type="radio"
+                                           class="uk-radio"
+                                           name="isDirectory"
+                                           id="isDirectory"
+                                           value="tabla"
+                                           data-th-field="*{isDirectory}">&nbsp;Tabla&nbsp;&nbsp;
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Sobreesribir destino</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="checkbox-inline">
+                                        <input class="uk-checkbox" type="checkbox" name="override"
+                                               data-th-field="*{override}"
+                                               checked>
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                    <!--li role="presentation" class="active"><a href="#tab_content1" id="home-tab"
+                                                                              role="tab" data-toggle="tab"
+                                                                              aria-expanded="true">Controling</a>
+                                    </li-->
+                                    <li role="presentation" class=""><a href="#tab_content2" role="tab"
+                                                                        id="directory-tab"
+                                                                        data-toggle="tab"
+                                                                        aria-expanded="false">Directorio</a>
+                                    </li>
+                                    <li role="presentation" class=""><a href="#tab_content3" role="tab" hidden="true"
+                                                                        id="table-tab" data-toggle="tab"
+                                                                        aria-expanded="false"><!--Tabla--></a>
+                                </ul>
+                                <div id="myTabContent" class="tab-content">
+                                    <!--div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
+                                         aria-labelledby="home-tab">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                   for="percentageToleranceRecords">Percentage tolerance
+                                                records
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="percentageToleranceRecords"
+                                                       name="percentageToleranceRecords"
+                                                       data-th-field="*{percentageToleranceRecords}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">alert by
+                                                mail</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="alertByEmail"
+                                                           data-th-field="*{alertByEmail}" checked>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Emails</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="emails" name="emails" data-th-field="*{emails}" type="text"
+                                                       class="tags form-control" value=""/>
+                                                <div id="suggestions-container"
+                                                     style="position: relative; float: left; width: 250px; margin: 10px;"></div>
+                                            </div>
+                                        </div>
+
+                                    </div-->
+                                    <div role="tabpanel" class="tab-pane fade" id="tab_content2"
+                                         aria-labelledby="directory-tab">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Directorio
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="directory"
+                                                       placeholder="Directorio a depositar archivos" name="directory"
+                                                       data-th-field="*{directory}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="tab_content3"
+                                         aria-labelledby="table-tab">
+
+                                        <!--div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Cumulative</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="comulative" checked>
+
+                                                </label>
+                                            </div>
+                                        </div-->
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Particionada</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label class="checkbox-inline">
+                                                    <input class="uk-checkbox" type="checkbox" name="particioned"
+                                                           data-th-field="*{particioned}" checked>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                   for="particionedField">Campo a particionar
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="particionedField" name="particionedField"
+                                                       placeholder="Campo a particionar la tabla"
+                                                       data-th-field="*{particionedField}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                   for="queue">Cola
+                                                <!--span class="required">*</span-->
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="queue" name="queue"
+                                                       placeholder="Cola para ejecutar proceso oozie"
+                                                       data-th-field="*{queue}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                   for="schemaDatabase">Esquema
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="schemaDatabase" name="schemaDatabase"
+                                                       placeholder="Esquema de base de datos de la tabla"
+                                                       data-th-field="*{schemaDatabase}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tablename">Nombre
+                                                de la tabla
+                                                <span
+                                                        class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="tablename" name="tablename"
+                                                       placeholder="Nombre de la tabla a insertar resultados"
+                                                       data-th-field="*{tablename}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <a data-th-href="@{/flows/list}" class="btn btn-warning">Cancelar</a>
+                                    <button type="submit" class="btn btn-success" data-toggle="modal"
+                                            data-target=".bs-example-modal-sm">Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <!--Finaliza Formulario-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal que Despliga Indicador de Espera-->
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <span style="font-size: 35px; color: #00aeef" class="fa fa-spinner fa-spin"></span>
+                        <strong>Cargando...</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Fin Modal-->
+
+        <!--Despliega modal espacios en blanco-->
+        <div id="modalWhites" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Espacios en blanco</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Consulta</h4>
+                        <textarea id="queryWhites" class="form-control col-md-7 col-xs-12"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveWhites();">Save
+                            changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Fin Modal Espacios en blanco-->
+
+
+    </div>
+</div>
+
+</body>
+</html>

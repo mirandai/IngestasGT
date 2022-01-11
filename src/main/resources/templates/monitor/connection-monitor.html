@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}" xmlns:th=http://www.thymeleaf.org>
+<head>
+    <title>Graphic By Connection</title>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+
+    <style>
+        #piechart {
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="x_panel">
+        <div class="x_title">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="height: 50px">
+                    <h3>Resumen
+                        <small> / Flujos Ejecutados por Conexión</small>
+                    </h3>
+                </div>
+
+            </div>
+        </div>
+        <div class="container">
+            <div class="x_panel">
+                <form class="form-inline" id="form2">
+                    <div id="piechart"></div>
+                </form>
+            </div>
+        </div>
+    </div><!--Fin Content-->
+
+
+    <script type="text/javascript">
+        google.charts.load("current", {
+            packages: ["corechart"]
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var dataRes = [];
+            var titulos = [];
+            var titulos2 = [];
+            var entradas = "[[${connectionsByCountry}]]";
+            entradas = entradas.replace("[", " ");
+            entradas = entradas.replace("]", " ");
+            var entrada = entradas.split(",");
+
+            if (entrada != null || entrada != "") {
+                for (i = 0; i < entrada.length; i++) {
+                    var d = entrada[i].split("|");
+                    console.log(d);
+
+                    item = [
+                        ['Pais', 'Data'],
+                        ["Completados", parseInt(d[1])],
+                        ["Pendientes", parseInt(d[2])],
+                        ["Fallidos", parseInt(d[3])]
+                    ];
+                    //  titulos.push(d[0] + ', ' + 'TOTAL DE FLUJOS' + ' ' + d[1] + '\n');
+                    titulos.push('FLUJOS  EJECUTADOS  EN '+" " + d[0].toUpperCase() + '\n');
+                    titulos2.push("NO SE PUDO GENERAR GRAFICA PORQUE NO  HAY  FLUJOS  EJECUTADOS EN "+ d[0].toUpperCase() + '\n');
+                    dataRes.push(item);
+                }
+                for (i = 0; i < dataRes.length; i++) {
+                    //var v1 = parseInt(dataRes[i][3][1]);
+                    console.log(parseInt(dataRes[i][1][1]));
+                    console.log(parseInt(dataRes[i][2][1]));
+                    console.log(parseInt(dataRes[i][3][1]));
+
+                    if (parseInt(dataRes[i][1][1]) == 0 &&
+                        parseInt(dataRes[i][2][1]) == 0 &&
+                        parseInt(dataRes[i][3][1]) == 0) {
+
+                        /*var data = google.visualization.arrayToDataTable([]);
+                        var options = {
+                            title: titulos[i],
+                            titlePosition: ['right'],
+                            pieSliceText: ['none'],
+                            sliceVisibilityThreshold: 0,
+                            legend: {position: 'bottom', fontName: 'Arial', textStyle: {fontSize: 12}},
+                            colors: ['#73e273', '#f0ad4e', '#FF4B4B']
+                        };*/
+
+                     /*   var newDiv = document.createElement("div");
+                        newDiv.setAttribute("id", "piechart" + i);
+                        newDiv.setAttribute("class", "form-group");
+                        newDiv.setAttribute("style", "width:480px; height:360px;");*/
+
+                        /*  var newH1 = document.createElement("h5");
+                          newH1.setAttribute("style", "{position: 'bottom', fontName: 'Arial', textStyle: {fontSize: 5}}");
+                          newH1.appendChild(document.createTextNode( titulos2[i]));
+                          newDiv.appendChild(newH1);*/
+
+                      /*  var span = document.createElement("span");
+                        span.innerHTML = titulos2[i];
+                        span.setAttribute("class", "label label-warning label-xs");
+                        span.setAttribute("style", "{position: 'bottom', fontName: 'Arial', textStyle: {fontSize: 5}}");
+                        newDiv.appendChild(span);
+                        document.getElementById("form2").appendChild(span);
+*/
+                    } else {
+                        console.log(dataRes[i][1][1].toString().trim());
+                        //   console.log('print DataRes [i]:' + dataRes[i]);
+
+                        var data = google.visualization.arrayToDataTable(dataRes[i]);
+                        var options = {
+                            title: titulos[i],
+                            titlePosition: ['right'],
+                            pieSliceText: ['none'],
+                            sliceVisibilityThreshold: 0,
+                            legend: {position: 'bottom', fontName: 'Arial', textStyle: {fontSize: 12}},
+                            colors: ['#73e273', '#f0ad4e', '#FF4B4B']
+                        };
+                        var newDiv = document.createElement("div");
+                        newDiv.setAttribute("id", "piechart" + i);
+                        newDiv.setAttribute("class", "form-group");
+                        newDiv.setAttribute("style", "width:480px; height:360px;");
+                        document.getElementById("form2").appendChild(newDiv);
+
+                        var chart = new google.visualization.PieChart(document.getElementById('piechart' + i));
+                        chart.draw(data, options);
+                    }
+                }
+            }
+
+        }
+    </script>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit-icons.min.js"></script>
+</body>
+</html>

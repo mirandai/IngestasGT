@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}">
+<head>
+    <title>Editar conexión</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="height: 50px;">
+                                <h3>Editar
+                                    <small>/conexión seleccionada</small>
+                                </h3>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="x_content">
+                        <br/>
+
+
+                        <form id="create-form-user"
+                              data-th-object="${connection}"
+                              data-th-action="@{/connections/save}"
+                              method="post"
+                              data-parsley-validate class="form-horizontal form-label-left">
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id">Id
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="id" required="required"
+                                           class="form-control col-md-7 col-xs-12"
+                                           readonly="readonly"
+                                           data-th-field="*{id}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Nombre de conexión</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Nombre de conexión"
+                                           data-th-field="*{connectionName}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tipo BD</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" data-th-field="*{dataBase}">
+                                        <option data-th-value="1">Oracle</option>
+                                        <option data-th-value="2">SQLServer</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Usuario</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Usuario de base datos"
+                                           data-th-field="*{dbUser}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Contraseña</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="password" class="form-control" placeholder="Contrase de base de datos"
+                                           name="password"
+                                           data-th-value="*{password}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Dirección IP</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Dirección IP"
+                                           data-th-field="*{host}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Puerto</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Puerto de la base de datos"
+                                           data-th-field="*{port}">
+                                </div>
+                            </div>
+
+                            <!--div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tipo Conexión</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" data-th-field="*{type}">
+                                        <option data-th-value="SID">SID</option>
+                                        <option data-th-value="SERVICE_NAME">SERVICE_NAME</option>
+                                    </select>
+                                </div>
+                            </div-->
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tipo conexión
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                    <input type="radio"
+                                           class="radioBtn"
+                                           name="type"
+                                           id="type"
+                                           value="SID"
+                                           data-th-field="*{type}">SID
+                                    <input type="radio"
+                                           class="radioBtn"
+                                           name="type"
+                                           id="type"
+                                           value="SERVICE_NAME"
+                                           data-th-field="*{type}">SERVICE_NAME
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblType">SID</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="SID"
+                                           data-th-field="*{sid}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Usuario unix</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Usuario de sistema operativo"
+                                           data-th-field="*{unixUser}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Directorio unix</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Directio de sistema operativo"
+                                           data-th-field="*{unixPath}">
+                                </div>
+                            </div>
+
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <!--button class="btn btn-primary" type="button">Cancel</button-->
+                                    <a data-th-href="@{/connections/list}" class="btn btn-warning">Cancelar</a>
+                                    <!--button class="btn btn-primary" type="reset">Reset</button-->
+                                    <button type="submit" class="btn btn-success">Guardar</button>
+                                </div>
+                            </div>
+
+
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+</body>
+</html>

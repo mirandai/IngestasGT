@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Submit flow</title>
+</head>
+
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Submit</h3>
+            </div>
+
+            <div class="title_right">
+                <form data-th-action="@{/users/list}" method="get">
+                    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                        <div class="input-group">
+                            <input type="text" name="value" class="form-control pull-right"
+                                   placeholder="Search for..." data-th-if="${key} == null"/>
+                            <input type="text" name="value" class="form-control pull-right"
+                                   placeholder="Search for..." data-th-if="${key} != null"
+                                   data-th-value="${key}"/>
+                            <!--input type="text" class="form-control" placeholder="Search for..."-->
+                            <span class="input-group-btn">
+                     <button class="btn btn-default" type="submit">Go!</button>
+                   </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="clearfix"></div>
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>List
+                            <small>select flow</small>
+                        </h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br/>
+
+
+                        <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Workflow</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>Workflow 1</td>
+                                            <td><i class="glyphicon glyphicon-trash fa fa-play"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+                                            <td>Workflow 2</td>
+                                            <td><i class="glyphicon glyphicon-trash fa fa-play"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+                                            <td>Workflow 3</td>
+                                            <td><i class="glyphicon glyphicon-trash fa fa-play"></i></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+</body>
+</html>

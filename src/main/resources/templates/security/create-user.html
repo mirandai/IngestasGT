@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+
+    <title>Crear usuario</title>
+</head>
+
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="height: 50px;">
+                                <h3>Usuarios
+                                    <small>/ Crear usuario para usar la aplicación
+                                    </small>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="x_content">
+                        <br/>
+
+
+                        <form id="create-form-user"
+                              data-th-object="${user}"
+                              data-th-action="@{/users/save}"
+                              method="post"
+                              data-parsley-validate class="form-horizontal form-label-left">
+
+                            <input type="hidden" data-th-field="*{id}"/>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">Usuario
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="username" required="required"
+                                           class="form-control col-md-7 col-xs-12"
+                                           data-th-field="*{username}" placeholder="Usuario de aplicación">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nombre
+                                    <span
+                                            class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="name" name="description" required="required"
+                                           class="form-control col-md-7 col-xs-12"
+                                           data-th-field="*{name}" placeholder="Nombre del usuario">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Contraseña
+                                    <span
+                                            class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="password" class="form-control" placeholder="Contraseña de usuario"
+                                           data-th-field="*{password}">
+                                </div>
+                            </div>
+
+                            <!--div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Repeat password
+                                    <span
+                                            class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="password" class="form-control" value="passwordonetwo">
+                                </div>
+                            </div-->
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <!--button data-th-href="@{/users/list}" class="btn btn-primary" type="button">Cancel
+                                    </button-->
+                                    <a data-th-href="@{/users/list}" class="btn btn-warning">Cancelar</a>
+                                    <button class="btn btn-primary" type="reset">Limpiar</button>
+                                    <button type="submit" class="btn btn-success">Crear</button>
+                                </div>
+                            </div>
+
+
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit-icons.min.js"></script>
+</body>
+</html>

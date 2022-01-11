@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>Crear conexión</title>
+</head>
+
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="height: 50px;">
+                                <h3>Conexión
+                                    <small>/ Crear conexión para usar la aplicación
+                                    </small>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="x_content">
+                        <br/>
+                        <!--Inicia Mensaje de Alerta-->
+                        <div data-th-if="${messageValidation}" class="alert alert-danger">
+                            <ul>
+                                <li data-th-each="validation : ${validations}" data-th-text="${validation}">
+                                </li>
+                            </ul>
+                        </div>
+                        <!--Finaliza Mensaje de Alerta-->
+
+                        <!--Inicia Formulario-->
+                        <form id="create-form-user"
+                              data-th-object="${connection}"
+                              data-th-action="@{/connections/save}"
+                              method="post"
+                              data-parsley-validate class="form-horizontal form-label-left">
+
+                            <input type="hidden" data-th-field="*{id}"/>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Nombre de conexión</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Nombre de conexión"
+                                           data-th-field="*{connectionName}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tipo BD</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" data-th-field="*{dataBase}">
+                                        <option data-th-value="1">Oracle</option>
+                                        <option data-th-value="2">SQLServer</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Usuario</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Usuario de la base de datos"
+                                           data-th-field="*{dbUser}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Contraseña</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="password" class="form-control" value="passwordonetwo"
+                                           placeholder="Contraseña de base de datos"
+                                           data-th-field="*{password}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Dirección IP</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Dirección IP"
+                                           data-th-field="*{host}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Puerto</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Puerto de la base de datos"
+                                           data-th-field="*{port}">
+                                </div>
+                            </div>
+
+                            <!--div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tipo Conexión</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" data-th-field="*{type}">
+                                        <option data-th-value="SID">SID</option>
+                                        <option data-th-value="SERVICE_NAME">SERVICE_NAME</option>
+                                    </select>
+                                </div>
+                            </div-->
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tipo conexión
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                    <input type="radio"
+                                           class="uk-radio"
+                                           name="type"
+                                           id="type"
+                                           value="SID"
+                                           data-th-field="*{type}">&nbsp;SID&nbsp;&nbsp;
+                                    <input type="radio"
+                                           class="uk-radio"
+                                           name="type"
+                                           id="type"
+                                           value="SERVICE_NAME"
+                                           data-th-field="*{type}">&nbsp;SERVICE_NAME&nbsp;
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblType">SID</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="SID"
+                                           data-th-field="*{sid}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Usuario unix</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Usuario sistema operativo"
+                                           data-th-field="*{unixUser}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Directorio unix</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="Directorio sistema operativo"
+                                           data-th-field="*{unixPath}">
+                                </div>
+                            </div>
+
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <!--button class="btn btn-primary" type="button">Cancel</button-->
+                                    <a data-th-href="@{/connections/list}" class="btn btn-warning">Cancelar</a>
+                                    <button class="btn btn-primary" type="reset">Limpiar</button>
+                                    <!--button type="submit" class="btn btn-success">Create</button-->
+                                    <button type="submit" class="btn btn-success" data-toggle="modal"
+                                            data-target=".bs-example-modal-sm">Crear
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <!--Fin Formulario-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--Modal que Despliga Indicador de Espera-->
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <span style="font-size: 35px; color: #00aeef" class="fa fa-spinner fa-spin"></span>
+                        <strong>Cargando...</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Fin Modal-->
+    </div>
+</div>
+</body>
+</html>

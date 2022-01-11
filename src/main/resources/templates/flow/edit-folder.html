@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+
+    <!-- UIkit JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit-icons.min.js"></script>
+    <title>Flujos Destino Carpeta</title>
+</head>
+<body>
+<div class="panel panel-default">
+    <div class="panel-body"></div>
+    <div class="right_col" role="main" data-layout-fragment="content">
+        <div class="">
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                        <!--Inicio Mensaje de Alerta-->
+                        <div class="clearfix">
+                            <div class="col-md-6">
+                                <div class="x_content bs-example-popovers">
+                                    <div class="alert alert-info alert-dismissible fade in" role="alert"
+                                         data-th-if="${mensaje}">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">×</span>
+                                        </button>
+                                        <strong data-th-text="${mensaje}"></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Fin Mensaje Alerta-->
+
+
+                        <div class="x_panel">
+                            <ul class="nav navbar-right panel_toolbox">
+                                <a class="btn" href="/flows-folder/list/" data-toggle="tooltip"
+                                   title="Volver a pagina anterior">
+                                    <i class="glyphicon glyphicon-circle-arrow-left fa-2x"></i>&nbsp;Regresar
+                                </a>
+                            </ul>
+                            <div class="x_title">
+                                <h3>Eliminar/
+                                    <small>Archivos en Carpeta</small>
+                                </h3>
+                                <div class="clearfix">
+                                </div>
+                            </div>
+                            <!--tabla-->
+                            <table class="table table-striped projects">
+                                <thead>
+                                <tr>
+                                    <th>Ruta del Archivo</th>
+                                </tr>
+                                <tr th:if="${FolderAndFile.empty}">
+                                    <td colspan="5"> No se encontrarón archivos para este
+                                        directorio.
+                                    </td>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <!--tr data-th-field="*{FolderAndFile}" -->
+                                <tr data-th-each="files : ${FolderAndFile}">
+                                    <td th:text="${files.toString()}"></td>
+                                    <td>
+                                        <a data-toggle="tooltip" title="Eliminar Archivo"
+                                           data-th-href="@{/flows-folder/deleteFile(path=${files})}">
+                                            <i class="glyphicon glyphicon-trash fa fa-trash"></i>
+                                        </a>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--/tabla-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1497 @@
+<!--!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}">
+<head>
+    <title>Plain Page</title>
+
+    <style>
+        body {
+            background: #f39c12;
+        }
+
+        .center-on-page {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        /* Reset Select */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            appearance: none;
+            outline: 0;
+            box-shadow: none;
+            border: 0 !important;
+            background: #faf8f6;
+            background-image: none;
+        }
+
+        /* Custom Select */
+        .select {
+            position: relative;
+            display: block;
+            width: 20em;
+            height: 3em;
+            line-height: 3;
+            background: #2c3e50;
+            overflow: hidden;
+            border-radius: .25em;
+        }
+
+        select {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0 0 0 .5em;
+            color: #34495e;
+            cursor: pointer;
+        }
+
+        select::-ms-expand {
+            display: none;
+        }
+
+        /* Arrow */
+        .select::after {
+            content: '\25BC';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            padding: 0 1em;
+            background: #34495e;
+            pointer-events: none;
+        }
+
+        /* Transition */
+        .select:hover::after {
+            color: #f39c12;
+        }
+
+        .select::after {
+            -webkit-transition: .25s all ease;
+            -o-transition: .25s all ease;
+            transition: .25s all ease;
+        }
+    </style>
+</head>
+
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="">
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+
+
+                        <div class="select">
+                            <select name="slct" id="slct">
+                                <option>Choose an option</option>
+                                <option value="1">Pure CSS</option>
+                                <option value="2">No JS</option>
+                                <option value="3">Nice!</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/javascript" data-th-href="@{/js/jquery.tagsinput/scr/jquery.tagsinput.js}"></script>
+
+    <script type="application/javascript">
+        function DisplayProgressMessage(ctl, msg) {
+            $(ctl).prop("disabled", true);
+            $(ctl).text(msg);
+            return true;
+        }
+    </script>
+</div>
+</body>
+</html-->
+
+
+<!--DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}" xmlns:th=http://www.thymeleaf.org>
+
+<head>
+    <link th:href="@{/static/css/profile.min.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="jquery.js" charset="utf-8"></script>
+<style>
+    /* Reset Select */
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        appearance: none;
+        outline: 10px;
+        box-shadow: 10px;
+        border: 1;
+        background: #faf8f6;
+        background-image: none;
+    }
+    /* Custom Select */
+    .select {
+        position: relative;
+        display: block;
+        width: 20em;
+        height: 3em;
+        line-height: 3;
+        background: #2c3e50;
+        overflow: hidden;
+        border-radius: .10em;
+    }
+    select {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0 0 0 .5em;
+        color: #34495e;
+        cursor: pointer;
+    }
+    select::-ms-expand {
+        display: none;
+    }
+    /* Arrow */
+    .select::after {
+        content: '\25BC';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0 1em;
+        background: #34495e;
+        pointer-events: none;
+    }
+    /* Transition */
+    .select:hover::after {
+        color: #f39c12;
+    }
+    .select::after {
+        -webkit-transition: .25s all ease;
+        -o-transition: .25s all ease;
+        transition: .25s all ease;
+    }
+</style>
+    <style>
+        /* Style buttons */
+
+        .buttonload {
+            background-color: #4CAF50; /* Green background */
+            border: none; /* Remove borders */
+            color: #00aeef; /* White text */
+            padding: 12px 16px; /* Some padding */
+            font-size: 35px /* Set a font size */
+        }
+    </style>
+    <script>
+
+        //Función que estoy usando para generar las Filas y Columnas dinamicamente (Botones add, Remove).
+        window.onload = function any_function_name() {
+
+            var prueba = '';
+            var cadena = document.getElementById("cadena").value;
+
+            if (cadena.length !== 0) {
+                var nuevaCadena = cadena.slice(0, -1);
+                var splitCadena = nuevaCadena.split(";");
+                var fila_actual = 0;
+                var fila;
+                var tbl = document.getElementById("mi-tabla");
+                var tblBody = document.getElementById("tbFlujo");
+
+
+                for (var i = 0 in splitCadena) {
+                    var splitElemento = splitCadena[i].split(",");
+
+                    var f = splitElemento[2];
+                    if (fila_actual === 0 || fila_actual !== f) {
+                        fila = document.createElement("tr");
+                    }
+
+                    var celda = document.createElement("td");
+                    var celda2 = document.createElement("td");
+
+                    //creando botones  para agregar fila/remover fila
+                    var btnAgregar = document.createElement("a");
+                    btnAgregar.className = "btn btn-primary btn-circle btnAdd";
+                    btnAgregar.text = "+";
+                    btnAgregar.addEventListener("click", agregarFila);
+
+                    var btnEliminar = document.createElement("a");
+                    btnEliminar.className = "btn btn-danger btn-circle btnRowRemove";
+                    btnEliminar.addEventListener("click", removerFila);
+                    btnEliminar.text = "-";
+
+                    var flag = false;
+                    if (splitElemento[5] === '2') {
+                        celda2.appendChild(btnEliminar);
+                    } else {
+                        if (i < splitCadena.length - 1) {
+                            var j = parseInt(i) + 1;
+                            var temp = splitCadena[j].split(',');
+                            // alert(temp);
+                            if (temp[5] === '1') {
+                                celda2.appendChild(btnAgregar);
+                                celda2.appendChild(btnEliminar);
+                                flag = true;
+                            }
+                        } else {
+                            celda2.appendChild(btnAgregar);
+                            celda2.appendChild(btnEliminar);
+                            flag = true;
+                        }
+                    }
+
+
+                    var select = document.createElement("select");
+                    select.setAttribute("id", "soflow");
+
+                    var options = "[Coordinator1;Coordinator2;Coordinator]";
+                    options = options.replace("[", "");
+                    options = options.replace("]", "");
+                    options = options.replace(" ", "");
+                    var op = options.split(",");
+
+                    op.forEach(function (strOption) {
+                        var option = document.createElement("option");
+                        var opcion_ = strOption.split("=");
+                        option.text = opcion_[0];
+                        option.value = opcion_[0].trim().replace(" ", "");
+                        select.add(option);
+
+                        fila_actual = splitElemento[2];
+                    });
+
+
+                    function busquedaBinaria(options, dato) {
+                        var inicio = 0;
+                        var pos;
+                        var fin = options.length - 1;
+
+                        while (inicio <= fin) {
+                            pos = Math.floor((inicio + fin) / 2);
+                            if (options[pos].trim().toUpperCase().localeCompare(dato.trim().toUpperCase()) === 0) {
+                                return pos;
+                            } else if (options[pos].trim().toUpperCase().localeCompare(dato.trim().toUpperCase()) === -1) {
+                                inicio = pos + 1;
+                            } else {
+                                fin = pos - 1;
+                            }
+                        }
+
+                        return -1;
+                    }
+
+
+                    var posicion = busquedaBinaria(op, splitElemento[1].replace(" ", "").trim());
+                    select.selectedIndex = posicion;
+                    // alert(posicion+ '|' +splitElemento[1]);
+
+
+                    if (splitElemento[5] === '1') {
+                        celda.appendChild(select);
+                        fila.appendChild(celda);
+                        if (flag === true) {
+                            fila.appendChild(celda2);
+                        }
+
+                    } else {
+                        celda2.appendChild(select);
+                        fila.appendChild(celda2);
+
+                    }
+
+                    tblBody.appendChild(fila);
+                    tbl.appendChild(tblBody);
+                }
+            }
+
+
+            function removerFila(elemento) {
+
+                console.log("click");
+                console.log(this);
+
+                var fila = this.parentNode.parentNode;
+                var tabla = fila.parentNode;
+                tabla.removeChild(fila);
+
+
+            }
+
+            function agregarFila() {
+
+                var select = document.createElement("select");
+                select.setAttribute("id", "soflow");
+
+
+                var options = "[[${fill_select}]]";
+                options = options.replace("{", "");
+                options = options.replace("}", "");
+                options = options.replace(" ", "");
+
+                var op = options.split(",");
+
+                op.forEach(function (strOption) {
+                    var option = document.createElement("option");
+                    opcion_ = strOption.split("=");
+                    option.text = opcion_[1];
+                    option.value = opcion_[1];
+                    select.add(option);
+
+                });
+                //finaliza Creación de Select.
+
+
+                //removiendo el boton agregar
+                var padre = this.parentNode;
+                var btn = padre.removeChild(this);
+
+                //agregando select creando boton para eliminar select.
+                padre.appendChild(select);
+            }
+
+            //Este Botón Agrega  Filas Dentro de una Tabla.
+            document.getElementById("btnAddFlujo").addEventListener("click", function () {
+
+
+                var tbFlujo = document.getElementById("tbFlujo");
+
+                // creando select
+
+                var select = document.createElement("select");
+                select.setAttribute("id", "soflow");
+
+                var options = "[[${fill_select}]]";
+                options = options.replace("{", "");
+                options = options.replace("}", "");
+                options = options.replace(" ", "");
+                var op = options.split(",");
+
+                op.forEach(function (strOption) {
+                    var option = document.createElement("option");
+                    var opcion_ = strOption.split("=");
+                    option.text = opcion_[1];
+                    option.value = opcion_[1];
+                    select.add(option);
+                });
+                //finaliza creación de select.
+
+
+                //creando  th1 -> celda A
+                var th1 = document.createElement("th");
+                th1.appendChild(select);
+
+                //creando th2-> celda B
+                var th2 = document.createElement("th");
+
+                //creando botones  para agregar fila/remover fila
+                var btnAgregar = document.createElement("a");
+                btnAgregar.className = "btn btn-primary btn-circle btnAdd";
+                btnAgregar.text = "+";
+                btnAgregar.addEventListener("click", agregarFila);
+
+
+                var btnEliminar = document.createElement("a");
+                btnEliminar.className = "btn btn-danger btn-circle btnRowRemove";
+                btnEliminar.addEventListener("click", removerFila);
+                btnEliminar.text = "-";
+
+
+                th2.appendChild(btnAgregar);
+                th2.appendChild(btnEliminar);
+
+
+                var tr = document.createElement("tr");
+                tr.appendChild(th1);
+                tr.appendChild(th2);
+
+                tbFlujo.appendChild(tr);
+
+            });
+
+            document.querySelectorAll(".btn").forEach(function (element) {
+                //btnClicks(element);
+            });
+
+            document.querySelectorAll(".btnRowRemove").forEach(function (element) {
+                element.addEventListener("click", removerFila);
+
+            });
+
+            document.querySelectorAll(".btnRowAdd").forEach(function (element) {
+                element.addEventListener("click", agregarFila);
+
+            });
+
+            document.getElementById("btnFinalizar").addEventListener("click", function () {
+                //Node.childNodes  devuelve una colección de hijos nodes del elemento dado donde el primer nodo hijo es asignado un índice .
+
+                var tBody = document.getElementById("tbFlujo");
+                var nodosFilas = tBody.childNodes;
+                var noFila = 0;
+                var registros = new Object();
+                registros.flujos = [];
+                var dependencias = "null";
+
+
+                nodosFilas.forEach(function (eFila) {
+                    if (eFila.nodeName == "TR") {
+                        var noColumna = 0;
+                        noFila++;
+                        var nodosColumnas = eFila.childNodes;
+
+
+                        var dependenciaTemp = [];
+                        nodosColumnas.forEach(function (eColumna) {
+                            if (eColumna.nodeName === "TH" || eColumna.nodeName === "TD") {
+                                noColumna++;
+
+
+                                var nodosInput = eColumna.childNodes;
+                                nodosInput.forEach(function (elemento) {
+                                    if (elemento.nodeName == "SELECT") {
+                                        var obj = new Object();
+                                        obj.name = document.getElementById('nombre').value;
+                                        obj.coordinator = elemento.value;
+                                        obj.posicion = noFila;
+                                        obj.col = noColumna;
+                                        obj.max = document.getElementById("tbFlujo").querySelectorAll("TR").length;
+                                        dependenciaTemp.push(elemento.value);
+                                        registros.flujos.push(obj);
+                                        obj.dependencia = dependencias;
+
+
+                                        prueba = prueba + obj.name + ',' + obj.coordinator + ',' + obj.posicion + ',' + obj.dependencia + ',' + obj.max + ',' + obj.col + ';';
+                                        console.log(prueba);
+                                        //  alert(prueba);
+                                        document.getElementById('cadena').value = prueba;
+                                    }
+
+                                });
+
+                                if (noColumna == 2) {
+                                    dependencias = dependenciaTemp.join("|");
+
+                                }
+                            }
+                        });
+
+                    }
+                });
+
+                registros.flujos.forEach(function (item) {
+                    item.max = noFila;
+                    console.log(item.max);
+                    // alert(item.max);
+                });
+            });
+        }
+    </script>
+    <script>
+        function crearTabla() {
+
+            //Recupero los valores seteados en los selects.
+            var cadena = document.getElementById('cadena').value;
+            var nuevaCadena = cadena.slice(0, -1);
+            var splitCadena = nuevaCadena.split(";");
+
+            var fila_actual = 0;
+            var fila;
+            var prueba = ''; //variable que contiene la cadena de String formada por los Datos que se guardaran
+
+            var tbl = document.getElementById("mi-tabla");
+            var tblBody = document.getElementById("tbFlujo");
+
+            splitCadena.forEach(function (elemento) {
+                var splitElemento = elemento.split(",");
+
+                //COORDINATOR                 FILA                     COLUMNA
+                //  dependencies = splitElemento[1] + ',' + splitElemento[2] + ',' + splitElemento[5];
+                var f = splitElemento[2];
+                if (fila_actual === 0 || fila_actual !== f) {
+                    fila = document.createElement("tr");
+                }
+
+                var celda = document.createElement("td");
+                var celda2 = document.createElement("td");
+
+                //creando botones  para agregar fila/remover fila
+                var btnAgregar = document.createElement("a");
+                btnAgregar.className = "btn btn-primary btn-circle btnAdd";
+                btnAgregar.text = "+";
+                btnAgregar.addEventListener("click", agregarFila);
+
+                var btnEliminar = document.createElement("a");
+                btnEliminar.className = "btn btn-danger btn-circle btnRowRemove";
+                btnEliminar.addEventListener("click", removerFila);
+                btnEliminar.text = "-";
+
+
+                var flag = false;
+                if (splitElemento[5] === '2') {
+                    celda2.appendChild(btnEliminar);
+                } else {
+                    if (i < splitElemento.length - 1) {
+                        var j = parseInt(i) + 1;
+                        var temp = splitElemento[j].split(';');
+
+                        if (temp[2] === '1') {
+                            celda2.appendChild(btnAgregar);
+                            celda2.appendChild(btnEliminar);
+                            flag = true;
+                        }
+                    } else {
+                        celda2.appendChild(btnAgregar);
+                        celda2.appendChild(btnEliminar);
+                        flag = true;
+                    }
+                }
+
+
+                var select = document.createElement("select");
+                select.setAttribute("class", "styled-select slate");
+
+                var options = "[[${fill_select}]]";
+                options = options.replace("[", "");
+                options = options.replace("]", "");
+                options = options.replace(" ", "");
+                options = options.replace("\n", "");
+                var op = options.split(",");
+
+
+                op.forEach(function (strOption) {
+                    var option = document.createElement("option");
+                    var opcion_ = strOption.split("=");
+                    option.text = opcion_[0];
+                    option.value = opcion_[0].trim().replace(" ", "");
+                    select.add(option);
+
+                    fila_actual = splitElemento[2];
+                });
+
+
+                function busquedaBinaria(options, dato) {
+                    var inicio = 0;
+                    var pos;
+                    var fin = options.length - 1;
+
+                    while (inicio <= fin) {
+                        pos = Math.floor((inicio + fin) / 2);
+                        if (options[pos].trim().toUpperCase().localeCompare(dato.trim().toUpperCase()) === 0) {
+                            return pos;
+                        } else if (options[pos].trim().toUpperCase().localeCompare(dato.trim().toUpperCase()) === -1) {
+                            inicio = pos + 1;
+                        } else {
+                            fin = pos - 1;
+                        }
+                    }
+
+                    return -1;
+                }
+
+
+                var posicion = busquedaBinaria(op, splitElemento[2].replace(" ", "").trim());
+                select.selectedIndex = posicion;
+
+
+                if (splitElemento[5] === '1') {
+                    celda.appendChild(select);
+                    fila.appendChild(celda);
+                    if (flag === true) {
+                        fila.appendChild(celda2);
+                    }
+
+                } else {
+                    celda2.appendChild(select);
+                    fila.appendChild(celda2);
+
+                }
+
+                tblBody.appendChild(fila);
+                tbl.appendChild(tblBody);
+
+
+                // Aqui empezé a hacer cambios
+                document.querySelectorAll(".btn").forEach(function (element) {
+                });
+                document.querySelectorAll(".btnRowRemove").forEach(function (element) {
+                    element.addEventListener("click", removerFila);
+                });
+                document.querySelectorAll(".btnRowAdd").forEach(function (element) {
+                    element.addEventListener("click", agregarFila);
+
+                });
+
+
+            });//Temina ciclo for
+            //Hasta acá finalizan los Cambios que estoy tratando de adecuar.
+
+
+            //Este Botón Agrega  Filas Dentro de una Tabla.
+            document.getElementById("btnAddFlujo").addEventListener("click", function () {
+                var tbFlujo = document.getElementById("tbFlujo");
+
+                //Creando elemento Select
+                var select = document.createElement("select");
+                select.setAttribute("class", "styled-select slate");
+
+                var options = "[[${fill_select}]]";
+                options = options.replace("[", "");
+                options = options.replace("]", "");
+                options = options.replace(" ", "");
+                var op = options.split(",");
+
+                op.forEach(function (strOption) {
+                    var option = document.createElement("option");
+                    var opcion_ = strOption.split("=");
+                    option.text = opcion_[0];
+                    option.value = opcion_[0].trim().replace(" ", "");
+                    select.add(option);
+
+                });
+
+                //creando  th1 -> celda A
+                var th1 = document.createElement("th");
+                th1.appendChild(select);
+
+                //creando th2-> celda B
+                var th2 = document.createElement("th");
+
+                //creando botones  para agregar fila/remover fila
+                var btnAgregar = document.createElement("a");
+                btnAgregar.className = "btn btn-primary btn-circle btnAdd";
+                btnAgregar.text = "+";
+                btnAgregar.addEventListener("click", agregarFila);
+
+                var btnEliminar = document.createElement("a");
+                btnEliminar.className = "btn btn-danger btn-circle btnRowRemove";
+                btnEliminar.addEventListener("click", removerFila);
+                btnEliminar.text = "-";
+
+                th2.appendChild(btnAgregar);
+                th2.appendChild(btnEliminar);
+
+                var tr = document.createElement("tr");
+                tr.appendChild(th1);
+                tr.appendChild(th2);
+
+                tbFlujo.appendChild(tr);
+            });
+
+
+            document.getElementById("btnFinalizar").addEventListener("click", function () {
+                //Node.childNodes  devuelve una colección de hijos nodes del elemento dado donde el primer nodo hijo es asignado un índice .
+                var tBody = document.getElementById("tbFlujo");
+                var nodosFilas = tBody.childNodes;
+                var noFila = 0;
+                var registros = new Object();
+                registros.flujos = [];
+                var dependencias = "null";
+
+
+                nodosFilas.forEach(function (eFila) {
+                    if (eFila.nodeName == "TR") {
+                        var noColumna = 0;
+                        noFila++;
+                        var nodosColumnas = eFila.childNodes;
+
+
+                        var dependenciaTemp = [];
+                        nodosColumnas.forEach(function (eColumna) {
+                            if (eColumna.nodeName == "TD" || eColumna.nodeName == "TH") {
+                                noColumna++;
+
+
+                                var nodosInput = eColumna.childNodes;
+                                nodosInput.forEach(function (elemento) {
+                                    if (elemento.nodeName == "SELECT") {
+                                        var obj = new Object();
+                                        obj.name = document.getElementById('nombre').value;
+                                        obj.coordinator = elemento.value;
+                                        obj.posicion = noFila;
+                                        obj.col = noColumna;
+                                        obj.max = document.getElementById("tbFlujo").querySelectorAll("TR").length;
+                                        dependenciaTemp.push(elemento.value);
+                                        registros.flujos.push(obj);
+                                        obj.dependencia = dependencias;
+
+
+                                        prueba = prueba + obj.name + ',' + obj.coordinator + ',' + obj.posicion + ',' + obj.dependencia + ',' + obj.max + ',' + obj.col + ';';
+                                        // console.log(prueba);
+                                        //alert(prueba);
+                                        document.getElementById('cadena').value = prueba;
+                                    }
+
+                                });
+
+                                if (noColumna == 2) {
+                                    dependencias = dependenciaTemp.join("|");
+
+                                }
+                            }
+                        });
+
+                    }
+                });
+
+                registros.flujos.forEach(function (item) {
+                    item.max = noFila;
+                    console.log(item.max);
+                    // alert(item.max);
+                });
+            });
+
+
+        }
+
+        function removerFila(elemento) {
+            console.log("click");
+            console.log(this);
+
+            var fila = this.parentNode.parentNode;
+            var tabla = fila.parentNode;
+            tabla.removeChild(fila);
+        }
+
+        function agregarFila() {
+            //Creando elemento Select
+            var select = document.createElement("select");
+            select.setAttribute("class", "styled-select slate");
+
+            var options = "[[${fill_select}]]";
+            options = options.replace("[", "");
+            options = options.replace("]", "");
+            options = options.replace(" ", "");
+            var op = options.split(",");
+
+
+            op.forEach(function (strOption) {
+                var option = document.createElement("option");
+                var opcion_ = strOption.split("=");
+                option.text = opcion_[0];
+                option.value = opcion_[0].trim().replace(" ", "");
+                select.add(option);
+
+            });
+
+
+            //Removiendo el boton agregar
+            var padre = this.parentNode;
+            var btn = padre.removeChild(this);
+
+            //agregando select creando boton para eliminar select.
+            padre.appendChild(select);
+        }
+    </script>
+
+
+</head>
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+
+
+
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="height: 50px;">
+                                    <h3>Dependencia
+                                        <small>/Crear
+                                        </small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="x_content">
+
+                            <form
+
+                                    method="post"
+                                    class="form-horizontal form-label-left">
+
+                                <input type="hidden" name="bundle_id"/>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nombre">Nombre
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="nombre" name="nombre"
+
+                                               placeholder="Nombre del flujo"
+                                               autocomplete="off"
+                                               class="form-control col-md-7 col-xs-12"/>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="minuto">Minuto
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="minuto" name="minuto"
+
+                                               placeholder="Minuto a ejecutar el proceso"
+                                               class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hora">Hora
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="hora" name="hora"
+
+                                               placeholder="Hora a ejecutar el proceso"
+                                               class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                           for="diaSemana">Día
+                                        de la
+                                        semana
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="diaSemana" name="diaSemana"
+                                               placeholder="Día de la semana a ejecutar el proceso"
+
+                                               class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mes">Mes
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="mes" name="mes"
+
+                                               placeholder="Mes a ejecutar el proceso"
+                                               class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="diaMes">Día
+                                        del
+                                        mes
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="diaMes" name="diaMes"
+                                               placeholder="Día del mes a ejecutar el proceso"
+
+                                               class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha de inicio
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="date" name="fecha_inicio"
+                                               placeholder="Fecha de inicio a ejecutar el proceso"
+
+                                               class="form-control col-md-7 col-xs-6">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha de
+                                        finalización</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="date" name="fecha_fin"
+                                               placeholder="Fecha de finalización de ejecución del proceso"
+
+
+                                               class="form-control col-md-7 col-xs-6">
+                                    </div>
+                                </div>
+                                <input id="cadena" type="hidden" class="form-control"
+                                />
+
+
+
+                                <h4> &nbsp;&nbsp;
+                                    Agregando Dependencias
+                                    <small>/ a un flujo</small>
+                                </h4>
+
+
+
+                                <table class="table is-bordered is-fullwidth" id="mi-tabla">
+
+                                    <thead>
+                                    <td>Seleccione Dependencias:</td>
+
+                                    </thead>
+
+                                        <tbody id="tbFlujo">
+
+
+                                        </tbody>
+
+                                    <tfoot>
+                                    <tr>
+                                        <th colspan="2">
+                                            <a class="btn btn-primary btn-circle" id="btnAddFlujo">+</a>
+                                        </th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+
+
+                                <div class="pull-right">
+                                    <button
+                                            id="btnFinalizar"
+                                            type="submit"
+                                            data-toggle="modal"
+                                            data-target=".bs-example-modal-sm"
+                                            style="width: 75px"
+                                            class="btn btn-success">Crear
+                                    </button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <span style="font-size: 35px; color: #00aeef" class="fa fa-spinner fa-spin"></span>
+                            <strong>Cargando...</strong>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit-icons.min.js"></script>
+
+</body>
+</html-->
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Business Department</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+
+            /* background-color; he put it purple make it stay gray or change to dark gray */
+
+            color: #474747; /* text color */
+            padding: 1% 0;
+            font-size: 1.2em;  /* This increases text font */
+            border: 0; /* the black thing */
+        }
+
+        .navbar-brand {
+            float: left;
+            min-height: 55px;
+            padding: 0 15px 5px;
+        }
+
+        .navbar-inverse .navbar-nav .active a, .navbar-inverse .navbar-nav .active a:focus, .navbar-inverse .navbar-nav .active a:hover {
+            color: #FFF;
+            background-color: #222222; /* for the black thing in home */ /* #232323 try to change later on if it does not match with anything else */
+        }
+
+        .navbar-inverse .navbar-nav li a {
+            color: #D5D5D5; /* text color?? */
+        }
+
+        .carousel-caption { /* this moves the text in the sliders up */
+            top: 50%;
+            transform: translateY(-50%);
+            text-transform: uppercase;
+        }
+
+        .btn { /* get started button */
+            font-size: 18px;
+            color: #FFF;
+            padding: 12px 22px;
+            background: #000000;
+            border: 2px solid #FFF;
+        }
+
+        .container {
+
+            margin-top: 30px;
+            margin-bottom: 26px;
+        }
+
+        #icon {
+            max-width: 200px; /* to change the size of 3 images */
+            margin: 1% auto;
+            margin-top: 30px;
+            margin-bottom: 26px;
+        }
+
+
+
+        footer { /* to design footer (no text) */
+            width: 100%;
+            background-color: #222222;
+            padding: 5%;
+            color: #FFF; /* text color */
+        }
+
+
+
+        .fa {
+            padding: 15px; /* social media pics size */
+            font-size: 25px;
+            color: #FFF;
+        }
+
+        .fa:hover {
+            color: #D5D5D5;
+            text-decoration: none;
+        }
+
+        @media (max-width: 900px) {
+            .fa {
+                font-size: 20px;
+                padding: 10px;
+            }
+        }
+
+
+
+        @media (max-width: 600px) {  /* this is to not show the getting started buttons and header on mobile */
+            .carousel-caption {
+                display: none;
+            }
+
+            #icon {
+                max-width: 150px;
+            }
+
+            h2 { /* h4 size in mobile */
+                font-size: 1.7em;
+            }
+        }
+
+
+
+        .container1 {    margin: 4% auto;
+        }
+
+        body{
+
+            margin: 0;
+            padding: 0;
+            background: url(img/Tower2.jpg);
+            background-size: cover;
+            background-position:center;
+            font-family: sans-serif;
+
+        }
+
+        .login-box{
+
+            width: 320px;
+            height: 420px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            top: 50%;
+            left:50%;
+            position:absolute;
+            transform: translate(-50%, -50%);
+            box-sizing: border-box;
+            padding: 70px 30px;
+        }
+
+        .avatar{
+
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: absolute;
+            top: -50px;
+            left: calc(50% - 50 px);
+
+        }
+
+        h1{
+
+            margin: 0;
+
+            padding: 0 0 20px;
+
+            text-align: center;
+
+            font-size: 22px;
+
+        }
+
+        .login-box p{
+
+            margin: 0;
+
+            padding: 0;
+
+            font-weight: bold;
+
+        }
+
+        .login-box input{
+
+            width: 100%;
+
+            margin-bottom: 20px;
+
+        }
+
+        .login-box input[type="text"], input[type="password"]
+
+        {
+
+            border: none;
+
+            border-bottom: 1 px solid #fff;
+
+            background: transparent;
+
+            outline: none;
+
+            height: 40px;
+
+            color: #fff;
+
+            font-size: 16px;
+
+        }
+
+        .login-box input[type="submit"]
+
+        {
+
+            border: none;
+
+            outline: none;
+
+            height: 40px;
+
+            background: #1c8adb;
+
+            color: #fff;
+
+            font-size: 18px;
+
+            border-radius: 20px;
+
+        }
+
+        .login-box input[type="submit"]:hover
+
+        {
+
+            cursor: pointer;
+
+            background: #39dc79;
+
+            color: #000;
+
+        }
+
+
+
+
+
+        .login-box a{
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            color: #fff;
+
+        }
+
+
+
+
+
+        .login-box a:hover
+
+        {
+
+            color: #39dc79;
+
+        }
+
+
+
+
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse">
+
+    <div class="container-fluid">
+
+        <div class="navbar-header">
+
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar"> <!-- for mobile burgr nav -->
+
+                <span class="icon-bar"></span>
+
+                <span class="icon-bar"></span>
+
+                <span class="icon-bar"></span>
+
+            </button>
+
+            <!--change to business logo -->  <a class="navbar-brand" href="indexReference.html"><img src="img/w3newbie.png"></a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="myNavbar">
+
+            <ul class="nav navbar-nav navbar-right">
+
+                <!--#for a ink -->    <li class="active"><a href="index.html">Home</a></li>
+
+                <li><a href="about.html">About</a></li>
+
+                <li><a href="courses.html">Courses</a></li>
+
+                <li><a href="deca.html">DECA</a></li>
+
+                <li><a href="schoolstore.html">School Store</a></li>
+
+                <li><a href="resources.html">Resources</a></li>
+
+                <li><a href="contacts.html">Contacts</a></li>
+
+            </ul>
+
+        </div>
+
+</nav>
+
+
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel"> <!-- For sliders -->
+
+    <ol class="carousel-indicators"> <!-- circles in sliders -->
+
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li> <!-- first slide to activate -->
+
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+
+    </ol>
+
+    <div class="carousel-inner" role="listbox">
+
+        <div class="item active">
+
+            <img src="img/Tower.png" style="width:1826px;height:570px;"> <!-- image for first slider-->
+
+            <div class="carousel-caption">
+
+                <h1>impact the future</h1> <!-- header text for first slider-->
+
+                <br> <!-- line break -->
+
+                <button type="button" class="btn btn-default">Learn More</button> <!-- button text -->
+
+            </div>
+
+        </div> <!-- End Active -->
+
+        <div class="item">
+
+            <img src="img/deca12.jpg" style="width:1826px;height:570px;"> <!-- Next (2nd) image in slider -->
+
+            <div class="carousel-caption">
+
+                <h1>Aspiring to becoming a successful entrepreneur?</h1> <!-- header text for first slider-->
+
+                <br> <!-- line break -->
+
+                <button type="button" class="btn btn-default">Find Out How</button> <!-- button text -->
+
+            </div>
+
+        </div>
+
+        <div class="item">
+
+            <img src="img/resources.jpeg" style="width:1826px;height:570px;"> <!-- 3rd image in slider -->
+
+            <div class="carousel-caption">
+
+                <h1>having trouble with your business assignment?</h1> <!-- header text for first slider-->
+
+                <br> <!-- line break -->
+
+                <button type="button" class="btn btn-default">Get Help</button> <!-- button text -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Start Slider Controls -->
+
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev"> <!--button to move slides-->
+
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><!-- image for sliders (the arrows) -->
+
+        <span class="sr-only">Previous</span>
+
+    </a> <!-- this is for left side -->
+
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next"> <!--button to move slides-->
+
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><!-- image for sliders (the arrows) -->
+
+        <span class="sr-only">Next</span>
+
+    </a> <!-- this is for right side-->
+
+</div> <!-- End of slider -->
+
+
+
+
+
+<!-- test login -->
+
+
+
+
+
+<div class="login-box">
+
+    <img src="img/Tower2.jpg" class="avatar">
+
+    <h1>Impact the Future</h1>
+
+    <form>
+
+        <p>Username</p>
+
+        <input type="text" name="username" placeholder="Enter Username">
+
+        <p>Password</p>
+
+        <input type="password" name="password" placeholder="Enter Password">
+
+        <input type="submit" name="submit" value="Login">
+
+        <a href="#">Forget Password</a>
+
+    </form>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- footer -->
+
+<footer class="container-fluid text-center">
+
+    <div class="row">
+
+        <div class="col-sm-4">
+
+            <h3>Contact Us</h3>
+
+            <br> <!-- line break -->
+
+            <h4>Our Address and contact info here.</h4>
+
+        </div>
+
+        <!-- For social media pics -->
+
+        <div class="col-sm-4">
+
+            <h3>Connect</h3>
+
+            <a href="#" class="fa fa-facebook"></a>
+            <a href="#" class="fa fa-twitter"></a>
+            <a href="#" class="fa fa-google"></a>
+            <a href="#" class="fa fa-instagram"></a>
+            <a href="#" class="fa fa-youtube"></a>
+            <h3>©2018 CSS Studios</h3>
+        </div>
+
+        <div class="col-sm-4">
+            <img src="img/bunny.png" class="icon">
+        </div>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}" xmlns:th=http://www.thymeleaf.org>
+<head>
+    <title>Workflow Monitor</title>
+    <link th:href="@{/static/css/profile.min.css}" rel="stylesheet" type="text/css"/>
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+    <style>
+        table {
+            table-layout: fixed;
+            width: 450px;
+        }
+
+        th, td {
+            width: 100px;
+            word-wrap: break-word;
+        }
+
+    </style>
+
+    <style>
+        /* Style buttons */
+
+        .buttonload {
+            background-color: #4CAF50; /* Green background */
+            border: none; /* Remove borders */
+            color: #00aeef; /* White text */
+            padding: 12px 16px; /* Some padding */
+            font-size: 35px /* Set a font size */
+        }
+    </style>
+</head>
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3></h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="height: 50px;">
+                                <h3>Monitor Workflow
+
+                                </h3>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="x_content">
+                        <div class="x_content">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-12">
+                                    <div class="x_panel">
+                                        <div class="x_title">
+                                            <h3>Ingresando Datos
+                                                <small>de Consulta</small>
+                                            </h3>
+                                            <div class="clearfix"></div>
+
+                                            <!--inicia Content de Formulario Datos de Consulta-->
+                                            <form id="demo-form3"
+                                                  data-parsley-validate
+                                                  data-th-action="@{/monitor/workflow}"
+                                                  data-th-object="${filter}"
+                                                  method="get"
+                                                  class="form-horizontal form-label-left">
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Inicio
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input class="form-control" type="datetime-local"
+                                                               id="startDate"
+                                                               name="startDate"
+                                                               data-th-field="*{startDate}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Fin
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input class="form-control" type="datetime-local"
+                                                               id="endDate"
+                                                               name="endDate"
+                                                               data-th-field="*{endDate}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Nombre
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <input class="form-control" type="text" id="name"
+                                                               name="name"
+                                                               placeholder="Nombre del flujo"
+                                                               data-th-field="*{name}">
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">País
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <select class="form-control" name="country"
+                                                                data-th-field="*{country}">
+                                                            <option data-th-value="'*'" data-th-text="'*'"></option>
+                                                            <option data-th-value="'GT'"
+                                                                    data-th-text="'GT'"></option>
+                                                            <option data-th-value="'SV'"
+                                                                    data-th-text="'SV'"></option>
+                                                            <option data-th-value="'NI'"
+                                                                    data-th-text="'NI'"></option>
+                                                            <option data-th-value="'CR'"
+                                                                    data-th-text="'CR'"></option>
+                                                            <option data-th-value="'PA'"
+                                                                    data-th-text="'PA'"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Estado
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <select class="form-control" name="status"
+                                                                data-th-field="*{status}">
+                                                            <option data-th-value="'*'" data-th-text="'*'"></option>
+                                                            <option data-th-value="'FAILED'"
+                                                                    data-th-text="'FAILED'"></option>
+                                                            <option data-th-value="'KILLED'"
+                                                                    data-th-text="'KILLED'"></option>
+                                                            <option data-th-value="'PREP'"
+                                                                    data-th-text="'PREP'"></option>
+                                                            <option data-th-value="'RUNNING'"
+                                                                    data-th-text="'RUNNING'"></option>
+                                                            <option data-th-value="'SUCCEEDED'"
+                                                                    data-th-text="'SUCCEEDED'"></option>
+                                                            <option data-th-value="'SUSPENDED'"
+                                                                    data-th-text="'SUSPENDED'"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Conexión
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                        <select class="form-control" name="sid"
+                                                                data-th-field="*{connection}">
+                                                            <option data-th-value="'*'" data-th-text="'*'"></option>
+                                                            <option data-th-each="connection: ${getconnection}"
+                                                                    data-th-value="${connection.getSid()}"
+                                                                    data-th-text="${connection.getConnectionName()}">
+                                                                Seleccione Conexión
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Tipo
+                                                    </label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <select class="form-control" name="typeFlow"
+                                                                data-th-field="*{typeFlow}">
+                                                            <option data-th-value="'*'" data-th-text="'*'"></option>
+                                                            <option data-th-value="'spool'"
+                                                                    data-th-text="'spool'"></option>
+                                                            <option data-th-value="'sqoop'"
+                                                                    data-th-text="'sqoop'"></option>
+                                                            <option data-th-value="'archivo'"
+                                                                    data-th-text="'archivo'"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="ln_solid"></div>
+                                                <div class="form-group">
+                                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                                        <button type="submit"
+                                                                data-toggle="modal"
+                                                                data-target=".bs-example-modal-sm"
+                                                                class="btn btn-success">Filtrar
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Finaliza formulario Datos de Consulta-->
+
+                                <!--Form que Contiene el gráfico-->
+                                <div class="col-md-6 col-xs-12">
+                                    <div class="x_panel">
+                                        <div class="x_title">
+                                            <h3>Resumen
+                                                <small>flujos</small>
+                                            </h3>
+                                            <div class="clearfix"></div>
+
+                                            <form id="form2" class="form-horizontal form-label-left"
+                                                  style="height: 387px;">
+                                                <div id="piechart" style="width:400px; height: 375px; "></div>
+                                                <br>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Fin de Form que Contiene gráfico-->
+                            </div>
+
+
+                            <!-- page content Table -->
+                            <div class="col-md-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h3>Detalle
+                                            <small>de los flujos</small>
+                                        </h3>
+                                    </div>
+
+                                    <!-- start project list -->
+                                    <div class="table-responsive">
+                                        <table class="table table-striped projects">
+                                            <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Estado</th>
+                                                <th>Progreso</th>
+                                                <th>Inicio</th>
+                                                <th>Fin</th>
+                                                <th>Detalles</th>
+                                                <th>Acciones</th>
+                                                <th>Shell</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tr th:if="${getWorkflow.isEmpty()}">
+                                                <td colspan="9"> No se encontrarón resultados para esta
+                                                    búsqueda.
+                                                </td>
+                                            </tr>
+
+                                            <tbody>
+                                            <tr data-th-each="workflow : ${getWorkflow}">
+                                                <td data-th-text="${workflow.name}"></td>
+                                                <td>
+                                                    <div th:switch="${workflow.status}">
+
+                                                        <p th:case="'SUCCEDEED_ALERT'">
+                                                            <label
+                                                                    class="label label-warning label-xs">SUCCEDEED_ALERT
+                                                            </label>
+                                                        </p>
+                                                        <p th:case="'RUNNING'">
+                                                            <label
+                                                                    class="label label-primary label-xs">RUNNING
+                                                            </label>
+                                                        </p>
+                                                        <p th:case="'SUCCEEDED'">
+                                                            <label
+                                                                    class="label label-success label-xs">SUCCEEDED
+                                                            </label>
+                                                        </p>
+                                                        <p th:case="'KILLED'">
+                                                            <label
+                                                                    class="label label-danger label-xs">KILLED
+                                                            </label>
+                                                        </p>
+                                                        <p th:case="'FAILED'">
+                                                            <label
+                                                                    class="label label-danger label-xs">FAILED
+                                                            </label>
+                                                        </p>
+                                                        <p th:case="'PREP'">
+                                                            <label
+                                                                    class="label label-info label-xs">PREP
+                                                            </label>
+                                                        </p>
+                                                        <p th:case="'SUSPENDED'">
+                                                            <label
+                                                                    class="label label-danger label-xs">SUSPEND
+                                                            </label>
+                                                        </p>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div th:switch="${workflow.status}">
+                                                        <div th:case="'SUCCEDEED_ALERT'" class="progress">
+                                                            <div class="progress-bar progress-bar-success progress-bar-striped"
+                                                                 role="progressbar" aria-valuenow="40"
+                                                                 aria-valuemin="0" aria-valuemax="100"
+                                                                 th:style="'width:'+${workflow.progress}+'%'"
+                                                                 th:text="${workflow.progress} + '%'">
+                                                            </div>
+                                                        </div>
+                                                        <div th:case="'SUCCEEDED'" class="progress">
+                                                            <div class="progress-bar progress-bar-success progress-bar-striped"
+                                                                 role="progressbar" aria-valuenow="40"
+                                                                 aria-valuemin="0" aria-valuemax="100"
+                                                                 th:style="'width:'+${workflow.progress}+'%'"
+                                                                 th:text="${workflow.progress} + '%'">
+                                                            </div>
+                                                        </div>
+                                                        <div th:case="'FAILED'" class="progress">
+                                                            <div class="progress-bar progress-bar-danger progress-bar-striped"
+                                                                 role="progressbar" aria-valuenow="40"
+                                                                 aria-valuemin="0" aria-valuemax="100"
+                                                                 th:style="'width:'+${workflow.progress}+'%'"
+                                                                 th:text="${workflow.progress} + '%'">
+                                                            </div>
+                                                        </div>
+                                                        <div th:case="'SUSPENDED'" class="progress">
+                                                            <div class="progress-bar progress-bar-danger progress-bar-striped"
+                                                                 role="progressbar" aria-valuenow="40"
+                                                                 aria-valuemin="0" aria-valuemax="100"
+                                                                 th:style="'width:'+${workflow.progress}+'%'"
+                                                                 th:text="${workflow.progress} + '%'">
+                                                            </div>
+                                                        </div>
+                                                        <div th:case="'PREP'" class="progress">
+                                                            <div class="progress-bar progress-bar-info progress-bar-striped"
+                                                                 role="progressbar" aria-valuenow="40"
+                                                                 aria-valuemin="0" aria-valuemax="100"
+                                                                 th:style="'width:'+${workflow.progress}+'%'"
+                                                                 th:text="${workflow.progress} + '%'">
+                                                            </div>
+                                                        </div>
+                                                        <div th:case="'RUNNING'" class="progress">
+                                                            <div class="progress-bar progress-bar-info progress-bar-striped"
+                                                                 role="progressbar" aria-valuenow="40"
+                                                                 aria-valuemin="0" aria-valuemax="100"
+                                                                 th:style="'width:'+${workflow.progress}+'%'"
+                                                                 th:text="${workflow.progress} + '%'">
+                                                            </div>
+                                                        </div>
+                                                        <div th:case="'KILLED'" class="progress">
+                                                            <div class="progress-bar progress-bar-danger progress-bar-striped"
+                                                                 role="progressbar" aria-valuenow="70"
+                                                                 aria-valuemin="0" aria-valuemax="100"
+                                                                 th:style="'width:'+${workflow.progress}+'%'"
+                                                                 th:text="${workflow.progress} + '%'">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td data-th-text="${workflow.startDate}"></td>
+                                                <td data-th-text="${workflow.endDate}"></td>
+                                                <!--td data-th-text="${workflow.alert}"></td-->
+
+                                                <!--Modal que despliega las Alertas y errores-->
+                                                <td>
+                                                    <a data-toggle="modal"
+                                                       data-target="#modal-warning-details"
+                                                       th:attr="data-target='#modal-warning-details'+${workflow.id}"><span
+                                                            class="glyphicon glyphicon-comment"></span></a>
+
+
+                                                    <div class="modal modal-warning fade in"
+                                                         th:id="modal-warning-details+${workflow.id}">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal"
+                                                                            aria-label="Close">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                    <h3 class="modal-title">Details</h3>
+                                                                </div>
+                                                                <div class="modal-body"
+                                                                     th:if="${workflow.alert.length()>0}">
+                                                                    <span class="label label-warning">Warning </span>
+                                                                    <h5 data-th-text="${workflow.alert}"></h5>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <span class="label label-info">Info </span>
+                                                                    <h5 data-th-text="${workflow.error}"></h5>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button"
+                                                                            class="btn btn-online pull-right"
+                                                                            data-dismiss="modal">Close
+                                                                        <span class="glyphicon glyphicon-remove-circle"></span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <!-- Fin Modal Alertas y errores-->
+
+                                                <!-- Inicia Modal Acciones de un WF-->
+                                                <td>
+                                                    <div th:if="${workflow.alert !=null}">
+                                                        <a data-toggle="modal" data-target="#modal-warning"
+                                                           th:attr="data-target='#modal-warning'+${workflow.id}"><span
+                                                                class="glyphicon glyphicon-eye-open"></span></a>
+
+                                                        <div class="modal modal-warning-lg fade in"
+                                                             th:id="modal-warning+${workflow.id}">
+                                                            <div class="modal-dialog-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button"
+                                                                                class="close"
+                                                                                data-dismiss="modal"
+                                                                                aria-label="Close">
+                                                                            <span aria-hidden="true">×</span>
+                                                                        </button>
+                                                                        <h5 class="modal-title">
+                                                                            Actions WorkFlow</h5>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <table class="table table-striped projects">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>Name</th>
+                                                                                <th>Type</th>
+                                                                                <th>Status</th>
+                                                                                <th>StartTime</th>
+                                                                                <th>EndTime</th>
+                                                                                <th>Message</th>
+                                                                            </tr>
+                                                                            </thead>
+
+                                                                            <tbody>
+                                                                            <tr data-th-each="action : ${workflow.actions}">
+                                                                                <td data-th-text="${action.name}"></td>
+                                                                                <td data-th-text="${action.type}"></td>
+                                                                                <td data-th-text="${action.status}"></td>
+                                                                                <td data-th-text="${action.startTime}"></td>
+                                                                                <td data-th-text="${action.endTime}"></td>
+                                                                                <td data-th-text="${action.errorMessage}"></td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button"
+                                                                                class="btn btn-outline pull-left"
+                                                                                data-dismiss="modal">
+                                                                            Close
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <!--fin de Modal Acciones WF-->
+
+
+                                                <!--Inicia Modal Shell-->
+                                                <td>
+                                                    <a data-toggle="modal"
+                                                       data-target="#modal-warning-details-shell"
+                                                       th:attr="data-target='#modal-warning-details-shell'+${workflow.id}">
+                                                        <span class="fa fa-info-circle"></span>
+                                                    </a>
+
+
+                                                    <div class="modal modal-warning fade in"
+                                                         th:id="modal-warning-details-shell+${workflow.id}">
+                                                        <div class="modal-dialog-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal"
+                                                                            aria-label="Close">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                    <h3 class="modal-title">Shell</h3>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <table class="table table-striped projects">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>Nombre WF</th>
+                                                                            <th>Fecha</th>
+                                                                            <th>Hora</th>
+                                                                            <th>Estado</th>
+                                                                            <th>Descripción</th>
+                                                                        </tr>
+
+                                                                        </thead>
+
+                                                                        <tbody>
+                                                                        <tr data-th-each="bitacora : ${workflow.bitacora}">
+                                                                            <td data-th-text="${bitacora.nombre_wf}"></td>
+                                                                            <td data-th-text="${bitacora.fecha}"></td>
+                                                                            <td data-th-text="${bitacora.hora}"></td>
+                                                                            <td data-th-text="${bitacora.estado}"></td>
+                                                                            <td data-th-text="${bitacora.descripcion}"></td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <button type="button"
+                                                                            class="btn btn-online pull-right"
+                                                                            data-dismiss="modal">Close
+                                                                        <span class="glyphicon glyphicon-remove-circle"></span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td> <!--Fin Modal Shell-->
+                                            </tr>
+                                            </tbody>
+                                        </table> <!-- end project list -->
+                                    </div>
+                                </div>
+                            </div> <!-- /page content -->
+                        </div><!--Fin Content-->
+                    </div>
+                </div>
+            </div>
+
+
+            <!--Modal que Despliga Indicador de Espera-->
+            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <span style="font-size: 35px; color: #00aeef" class="fa fa-spinner fa-spin"></span>
+                            <strong>Cargando...</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Fin Modal-->
+
+            <script type="text/javascript" data-th-inline="javascript">
+                google.charts.load('current', {'packages': ['corechart']});
+                google.charts.setOnLoadCallback(drawChart);
+
+
+                function drawChart() {
+                    var d = [[${data}]];
+                    var data = google.visualization.arrayToDataTable(d);
+
+                    var options = {
+                        title: 'Resumen flujos',
+                        pieSliceText: ['none'],
+                        legend: {position: 'bottom', fontName: 'Arial', textStyle: {fontSize: 11}},
+                        colors: ['#FF4B4B', '#73e273', '#FF4B4B', '#4CC7FF', '#FF4B4B', '#4A49FF', '#f0ad4e',]
+                    };
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                    chart.draw(data, options);
+                }
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit-icons.min.js"></script>
+</body>
+</html>
+

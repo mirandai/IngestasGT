@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es" data-layout-decorate="~{fragments/layout}">
+<head>
+    <title>Flujo de sqoop</title>
+</head>
+
+<body onload="agregar_caja()">
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="height: 50px;">
+                                <h3>Flujo Sqoop
+                                    <small>/Crear flujo del tipo sqoop</small>
+                                </h3>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="x_content">
+                        <br/>
+
+                        <!--Inicia Mensaje de Alerta-->
+                        <div data-th-if="${message}" data-th-text="${message}"
+                             class="alert alert-danger">
+                        </div>
+
+                        <div data-th-if="${messageValidation}" class="alert alert-danger">
+                            <ul>
+                                <li data-th-each="validation : ${validations}" data-th-text="${validation}">
+                                </li>
+                            </ul>
+                        </div>
+                        <!--Fin Mensaje de Alerta-->
+
+                        <!--Inicia Formulario-->
+                        <form id="demo-form2" data-parsley-validate
+                              data-th-action="@{/sqoop-flow/edit}"
+                              data-th-object="${flow}"
+                              method="post"
+                              class="form-horizontal form-label-left">
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id">Id
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="id" required="required"
+                                           class="form-control col-md-7 col-xs-12"
+                                           readonly="readonly" name="id" data-th-field="*{id}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nombre
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="name" name="name" placeholder="Nombre del flujo"
+                                           data-th-field="*{name}"
+                                           class="form-control col-md-7 col-xs-12" readonly="readonly">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Descripción
+                                    <span
+                                            class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="description" name="description"
+                                           placeholder="Descripción del flujo"
+                                           data-th-field="*{description}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <!--div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">País
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" name="country">
+                                        <option>GUATEMALA</option>
+                                        <option>EL SALVADOR</option>
+                                        <option>NICARAGUA</option>
+                                        <option>COSTA RICA</option>
+                                        <option>PANAMA</option>
+                                    </select>
+                                </div>
+                            </div-->
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Pais
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" required="required" name="country"
+                                            data-th-field="*{country}"  data-th-value="${country}">
+
+                                        <option value="0">Choose country</option>
+                                        <option value="GUATEMALA" >GUATEMALA</option>
+                                        <option value="EL SALVADOR" >EL SALVADOR</option>
+                                        <option value="NICARAGUA" >NICARAGUA</option>
+                                        <option value="COSTA RICA" >COSTA RICA</option>
+                                        <option value="PANAMA" >PANAMA</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Conexión
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control"
+                                            name="connectionId"
+                                            data-th-field="*{connectionId}">
+                                        <option data-th-each="connection : ${connectionList}"
+                                                data-th-value="${connection.id}"
+                                                data-th-text="${connection.connectionName}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Se hicieron cambios para Agregar dinamicamente los parametros de consulta
+                             26-02-19-->
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="query">Consulta
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <textarea id="query" class="form-control col-md-7 col-xs-12"
+                                          placeholder="Consulta de la base de datos"
+                                          name="query" data-th-field="*{query}"
+                                          data-parsley-trigger="keyup"
+                                          data-parsley-validation-threshold="10"></textarea>
+                                </div>
+
+                                <button type="submit"
+                                        class="btn btn-primary"
+                                        name="parameters"
+                                        value="edit"
+                                        style="width:160px">
+                                    configurar parametros
+                                </button>
+                            </div>
+
+                            <script>
+                                var cajas = 0;
+                                var parametros = "[[${parametros}]]";
+                                var valoresSplit = parametros.split(',');
+                                var contenido = " ";
+
+                                function agregar_caja() {
+                                    console.log(valoresSplit);
+                                    if (parametros.length > 0) {
+                                        var getmensaje = document.getElementById('variables').getAttribute('value');
+
+                                        if (getmensaje.length > 0) {
+                                            var val = getmensaje.split(',');
+
+                                            for (i in valoresSplit) {
+                                                contenido += "<label class=\"control-label col-md-3 col-sm-3 col-xs-12\">" + valoresSplit[i] + "</label>" + ": <input type=text class='form-control' autocomplete='off' style='width: 250px' value='" + val[i] + "'  placeholder='Ingrese Valores' id='txt" + i.toString() + "' name='caja" + i.toString() + "'><br>"
+                                            }
+                                        } else {
+                                            for (i in valoresSplit) {
+                                                contenido += "<label class=\"control-label col-md-3 col-sm-3 col-xs-12\">" + valoresSplit[i] + "</label>" + ": <input type=text class='form-control' autocomplete='off' style='width: 250px'  placeholder='Ingrese Valores' id='txt" + i.toString() + "' name='caja" + i.toString() + "'><br>"
+                                            }
+                                        }
+                                        document.getElementById("cajas").innerHTML = contenido;
+                                        var variable = document.getElementById("cajas").value;
+                                        console.log(variable);
+                                    }
+                                }
+
+                                function getValueText() {
+                                    var mensaje = '';
+                                    for (i in valoresSplit) {
+                                        if (i == valoresSplit.length - 1) {
+                                            mensaje += document.getElementById("txt" + i.toString()).value;
+                                        } else {
+                                            mensaje += document.getElementById("txt" + i.toString()).value + ',';
+                                        }
+                                    }
+                                    document.getElementById('variables').setAttribute('value', mensaje);
+                                    document.getElementById('variables2').setAttribute('value',mensaje);
+                                    console.log(mensaje);
+                                }
+                            </script>
+
+
+                            <div class="form-group">
+                                <div class="control-label col-md-3 col-sm-3 col-xs-12"/>
+                                <div class="col-md-6 col-sm-6 col-xs-12"></div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    <div id="cajas">
+                                        <input type="hidden"
+                                               class="form-control"
+                                               style="width:250px">
+                                    </div>
+
+                                    <div>
+                                        <input type="hidden"
+                                               id="variables"
+                                               name="variables"
+                                               data-th-field="*{variables}"
+                                               class="form-control"
+                                               style="width:250px">
+                                    </div>
+                                    <div>
+                                        <input type="hidden"
+                                               id="variables2"
+                                               name="variables2"
+                                               data-th-field="*{variables2}"
+                                               class="form-control"
+                                               style="width:250px">
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Fin de Textbox -->
+                            <!--Fin Modificaciones Consutlta -->
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Separadores
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control"
+                                            aria-describedby="status-addon"
+                                            id="separator_"
+                                            name="separator_"
+                                            data-th-field="*{separator_}">
+                                        <option data-th-each="sep : ${separatorList}"
+                                                data-th-value="${sep.character_}"
+                                                data-th-text="${sep.character_}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="filename">Nombre del
+                                    archivo
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="filename" name="filename"
+                                           placeholder="Nombre del archivo a genarar" data-th-field="*{filename}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Programar ahora
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                    <input type="radio"
+                                           class="uk-radio"
+                                           name="isSchedule"
+                                           id="isSchedule"
+                                           value="yes"
+                                           data-th-field="*{isSchedule}">&nbsp;Si&nbsp;&nbsp;
+                                    <input type="radio"
+                                           class="uk-radio"
+                                           name="isSchedule"
+                                           id="isSchedule"
+                                           value="not"
+                                           data-th-field="*{isSchedule}">&nbsp;No&nbsp;&nbsp;
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblMinute" for="minute">Minuto
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="minute" name="minute"
+                                           placeholder="Minuto a ejecutar el proceso" data-th-field="*{minute}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblHour" for="hour">Hora
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="hour" name="hour" data-th-field="*{hour}"
+                                           placeholder="Hora a ejecutar el proceso"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblWeekday" for="weekday">Día
+                                    de la semana
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="weekday" name="weekday"
+                                           placeholder="Día de la semana a ejecutar el proceso"
+                                           data-th-field="*{weekday}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblMonth" for="month">Mes
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="month" name="month"
+                                           placeholder="Mes a ejecutar el proceso" data-th-field="*{month}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblMonthday"
+                                       for="monthday">Día del mes
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="monthday" name="monthday"
+                                           placeholder="Día del mes a ejecutar el proceso" data-th-field="*{monthday}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblStartDate">Fecha de
+                                    inicio
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="date" name="startDate"
+                                           placeholder="Fecha de inicio a ejecutar el proceso"
+                                           data-th-field="*{startDate}"
+                                           class="form-control col-md-7 col-xs-6"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="lblEndDate">Fecha de
+                                    finalización</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="date" name="endDate"
+                                           placeholder="Fecha de finalización de ejecución del proceso"
+                                           data-th-field="*{endDate}"
+                                           class="form-control col-md-7 col-xs-6">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                       for="queueSqoop">Cola sqoop
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="queueSqoop" name="queueSqoop"
+                                           placeholder="Cola sqoop para ejecutar el proceso"
+                                           data-th-field="*{queueSqoop}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tamaño de la tabla
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control"
+                                            aria-describedby="status-addon"
+                                            id="tableSize"
+                                            name="tableSize"
+                                            data-th-field="*{tableSize}">
+                                        <option data-th-each="table : ${tableList}"
+                                                data-th-value="${table.description}"
+                                                data-th-text="${table.description}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                       for="split">Split
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="split" name="split" placeholder="Campo separador"
+                                           data-th-field="*{split}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                       for="fileSize">File Size
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="fileSize" name="fileSize"
+                                           placeholder="Tamaño del archivo - fetchsize" data-th-field="*{fileSize}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                       for="mappers">Mappers
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="mappers" name="mappers" placeholder="Hilos"
+                                           data-th-field="*{mappers}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                       for="percentageToleranceRecords">Porcentage de tolerancia de registros
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="percentageToleranceRecords"
+                                           name="percentageToleranceRecords"
+                                           data-th-field="*{percentageToleranceRecords}"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Alertar vía correo</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="checkbox-inline">
+                                        <input class="uk-checkbox" type="checkbox" name="alertByEmail"
+                                               data-th-field="*{alertByEmail}" checked>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Correos</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input id="emails" name="emails"
+                                           placeholder="Correos a enviar notifiación, separados por coma"
+                                           data-th-field="*{emails}" type="text"
+                                           class="tags form-control"
+                                           value=""/>
+                                    <div id="suggestions-container"
+                                         style="position: relative; float: left; width: 250px; margin: 10px;"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Destino
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="radio"
+                                           class="uk-radio"
+                                           name="isDirectory"
+                                           id="isDirectory1"
+                                           value="carpeta"
+                                           data-th-field="*{isDirectory}">&nbsp;Directorio&nbsp;&nbsp;
+                                    <!--input type="radio" class="flat" name="isDirectory" data-th-field="*{isDirectory}"
+                                           id="isDirectory"
+                                           value="carpeta" checked/-->
+                                    <!--input type="radio" class="flat" name="isDirectory" data-th-field="*{isDirectory}"
+                                           id="isDirectory"
+                                           value="tabla"/-->
+                                    <input type="radio"
+                                           class="uk-radio"
+                                           name="isDirectory"
+                                           id="isDirectory2"
+                                           value="tabla"
+                                           data-th-field="*{isDirectory}">&nbsp;Tabla&nbsp;&nbsp;
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Sobreesribir destino</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="checkbox-inline">
+                                        <input class="uk-checkbox" type="checkbox" name="override"
+                                               data-th-field="*{override}"
+                                               checked>
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                    <!--li role="presentation" class="active"><a href="#tab_content1" id="home-tab"
+                                                                              role="tab" data-toggle="tab"
+                                                                              aria-expanded="true">Controling</a>
+                                    </li-->
+                                    <li role="presentation" class="active"><a href="#tab_content2" role="tab"
+                                                                              id="directory-tab"
+                                                                              data-toggle="tab"
+                                                                              aria-expanded="true">Directorio</a>
+                                    </li>
+                                    <li role="presentation" class="active"><a href="#tab_content3" role="tab"
+                                                                              id="table-tab" data-toggle="tab"
+                                                                              aria-expanded="true">Tabla</a>
+                                </ul>
+                                <div id="myTabContent" class="tab-content">
+                                    <!--div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
+                                         aria-labelledby="home-tab">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                   for="percentageToleranceRecords">Percentage tolerance
+                                                records
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="percentageToleranceRecords"
+                                                       name="percentageToleranceRecords"
+                                                       data-th-field="*{percentageToleranceRecords}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">alert by
+                                                mail</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="alertByEmail"
+                                                           data-th-field="*{alertByEmail}" checked>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Emails</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="emails" name="emails" data-th-field="*{emails}" type="text"
+                                                       class="tags form-control"
+                                                       value=""/>
+                                                <div id="suggestions-container"
+                                                     style="position: relative; float: left; width: 250px; margin: 10px;"></div>
+                                            </div>
+                                        </div>
+
+                                    </div-->
+                                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content2"
+                                         aria-labelledby="directory-tab">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Directorio
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="directory" name="directory"
+                                                       placeholder="Directorio a depositar archivos"
+                                                       data-th-field="*{directory}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="tab_content3"
+                                         aria-labelledby="table-tab">
+
+                                        <!--div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Cumulative</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="comulative" checked>
+
+                                                </label>
+                                            </div>
+                                        </div-->
+
+                                        <!--div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Override</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="override" data-th-field="*{override}"
+                                                           checked>
+                                                </label>
+                                            </div>
+                                        </div-->
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Particionada</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label class="checkbox-inline">
+                                                    <input class="uk-checkbox" type="checkbox" name="particioned"
+                                                           data-th-field="*{particioned}" checked>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                   for="particionedField">Campo a particionar
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="particionedField" name="particionedField"
+                                                       placeholder="Campo a particionar la tabla"
+                                                       data-th-field="*{particionedField}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+
+                                        <!--div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                   for="queue">Queue
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="queue" name="queue" data-th-field="*{queue}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div-->
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                   for="schemaDatabase">Squema
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="schemaDatabase" name="schemaDatabase"
+                                                       placeholder="Esquema de base de datos de la tabla"
+                                                       data-th-field="*{schemaDatabase}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tablename">Nombre
+                                                de la tabla
+                                                <span
+                                                        class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="tablename" name="tablename"
+                                                       placeholder="Nombre de la tabla a insertar resultados"
+                                                       data-th-field="*{tablename}"
+                                                       class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <a data-th-href="@{/flows/list}" class="btn btn-warning">Cancelar</a>
+                                    <button type="submit"
+                                            class="btn btn-success"
+                                            data-toggle="modal"
+                                            data-target=".bs-example-modal-sm"
+                                            name="parameters"
+                                            value="create"
+                                            onclick="getValueText();">Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <!--Finaliza formulario-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal que Despliga Indicador de Espera-->
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <span style="font-size: 35px; color: #00aeef" class="fa fa-spinner fa-spin"></span>
+                        <strong>Cargando...</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Fin Modal-->
+
+    </div>
+</div>
+
+</body>
+</html>
+
+

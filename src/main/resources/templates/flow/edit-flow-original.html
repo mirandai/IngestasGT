@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}">
+<head>
+    <title>Spool Flow</title>
+</head>
+
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Flow</h3>
+            </div>
+
+
+        </div>
+
+        <div class="clearfix"></div>
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Edit
+                            <small>flow selected</small>
+                        </h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br/>
+
+
+                        <form id="demo-form2" data-parsley-validate
+                              data-th-object="${flow}"
+                              data-th-action="@{/spool-flow/save}"
+                              method="post"
+                              class="form-horizontal form-label-left">
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id">Id
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="id" required="required"
+                                           class="form-control col-md-7 col-xs-12"
+                                           readonly="readonly" name="id" data-th-field="*{id}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="name" name="name" required="required"
+                                           class="form-control col-md-7 col-xs-12" data-th-field="*{name}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Description
+                                    <span
+                                            class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="description" name="description" required="required"
+                                           class="form-control col-md-7 col-xs-12" data-th-field="*{description}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Country
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" required="required" name="country"
+                                            data-th-field="*{country}">
+                                        <option value="0">Choose country</option>
+                                        <option value="GUATEMALA">GUATEMALA</option>
+                                        <option value="EL SALVADOR">EL SALVADOR</option>
+                                        <option value="NICARAGUA">NICARAGUA</option>
+                                        <option value="COSTA RICA">COSTA RICA</option>
+                                        <option value="PANAMA">PANAMA</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Connection Name
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" required="required" name="connectionId"
+                                            data-th-field="*{connectionId}">
+                                        <option data-th-each="connection : ${connectionList}"
+                                                data-th-value="${connection.id}"
+                                                data-th-text="${connection.connectionName}">Choose connection
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="query">Query :
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <textarea id="query" required="required" class="form-control col-md-7 col-xs-12"
+                                          name="query"
+                                          data-parsley-trigger="keyup"
+                                          data-parsley-validation-threshold="10" data-th-field="*{query}"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="filename">Filename
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="filename" name="filename" required="required"
+                                           class="form-control col-md-7 col-xs-12" data-th-field="*{filename}">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="minute">Minute
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="minute" required="required"
+                                           class="form-control col-md-7 col-xs-12" data-th-field="*{minute}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hour">Hour
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="hour" required="required"
+                                           class="form-control col-md-7 col-xs-12" data-th-field="*{hour}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="weekday">Day of week
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="weekday" required="required"
+                                           class="form-control col-md-7 col-xs-12" data-th-field="*{weekday}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="month">Month
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="month" required="required"
+                                           class="form-control col-md-7 col-xs-12" data-th-field="*{month}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="monthday">Day of month
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="monthday" required="required"
+                                           class="form-control col-md-7 col-xs-12" data-th-field="*{monthday}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Start date
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="date" name="startDate" class="form-control col-md-7 col-xs-6"
+                                           required="required" data-th-field="*{startDate}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">End date</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="date" name="endDate" class="form-control col-md-7 col-xs-6"
+                                           data-th-field="*{endDate}">
+                                </div>
+                            </div>
+
+
+                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#tab_content1" id="home-tab"
+                                                                              role="tab" data-toggle="tab"
+                                                                              aria-expanded="true">Controling</a>
+                                    </li>
+                                    <li role="presentation" class=""><a href="#tab_content2" role="tab"
+                                                                        id="directory-tab"
+                                                                        data-toggle="tab"
+                                                                        aria-expanded="false">Directory</a>
+                                    </li>
+                                    <li role="presentation" class=""><a href="#tab_content3" role="tab"
+                                                                        id="table-tab" data-toggle="tab"
+                                                                        aria-expanded="false">Table</a>
+                                </ul>
+                                <div id="myTabContent" class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
+                                         aria-labelledby="home-tab">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                   for="percentageToleranceRecords">Percentage tolerance
+                                                records
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="percentageToleranceRecords" required="required"
+                                                       class="form-control col-md-7 col-xs-12"
+                                                       data-th-field="*{percentageToleranceRecords}">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">alert by
+                                                mail</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="alertByEmail" checked
+                                                           data-th-field="*{alertByEmail}">
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Emails</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input id="emails" name="emails" type="text"
+                                                       class="tags form-control"
+                                                       value="social, adverts, sales" data-th-field="*{emails}"/>
+                                                <div id="suggestions-container"
+                                                     style="position: relative; float: left; width: 250px; margin: 10px;"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="tab_content2"
+                                         aria-labelledby="directory-tab">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Directory
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="directory" name="directory"
+                                                       class="form-control col-md-7 col-xs-12"
+                                                       data-th-field="*{directory}">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="tab_content3"
+                                         aria-labelledby="table-tab">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Cumulative</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="comulative" checked
+                                                           data-th-field="*{comulative}">
+
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Override</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="override" checked
+                                                           data-th-field="*{override}">
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                   for="schemaDatabase">Schema
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="schemaDatabase" name="schemaDatabase"
+                                                       class="form-control col-md-7 col-xs-12"
+                                                       data-th-field="*{schemaDatabase}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tablename">Tablename
+                                                <span
+                                                        class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="tablename" name="tablename"
+                                                       class="form-control col-md-7 col-xs-12"
+                                                       data-th-field="*{tablename}">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <button class="btn btn-primary" type="button">Cancel</button>
+                                    <button class="btn btn-primary" type="reset">Reset</button>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+</body>
+</html>

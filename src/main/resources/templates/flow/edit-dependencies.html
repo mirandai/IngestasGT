@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}" xmlns:th=http://www.thymeleaf.org>
+
+<head>
+    <link th:href="@{/static/css/profile.min.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="jquery.js" charset="utf-8"></script>
+    <style>
+
+        .styled-select {
+            height: 29px;
+            overflow: hidden;
+            width: 240px;
+        }
+
+        .styled-select select {
+            background: transparent;
+            border: none;
+            font-size: 14px;
+            height: 29px;
+            padding: 5px; /* If you add too much padding here, the options won't show in IE */
+            width: 268px;
+        }
+
+        .styled-select.slate {
+
+            height: 34px;
+            width: 325px;
+
+        }
+
+        .styled-select.slate select {
+            border: 1px solid #ccc;
+            font-size: 16px;
+            height: 34px;
+            width: 268px;
+        }
+
+        select#soflow, select#soflow-color {
+            -webkit-appearance: button;
+            -webkit-border-radius: 2px;
+            -webkit-box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+            -webkit-padding-end: 20px;
+            -webkit-padding-start: 12px;
+            -webkit-user-select: none;
+            background-position: 97% center;
+            background-repeat: no-repeat;
+            border: 1px solid #AAA;
+            color: #555;
+            font-size: inherit;
+            margin: 20px;
+            overflow: hidden;
+            padding: 5px 10px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 375px;
+        }
+
+    </style>
+    <style>
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            padding: 6px 0px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.42857;
+
+            -webkit-box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+    <style>
+        .glyphicon-refresh-animate {
+            -animation: spin .7s infinite linear;
+            -webkit-animation: spin2 .7s infinite linear;
+        }
+
+        @-webkit-keyframes spin2 {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: scale(1) rotate(0deg);
+            }
+            to {
+                transform: scale(1) rotate(360deg);
+            }
+        }
+    </style>
+    <style>
+        /* Style buttons */
+
+        .buttonload {
+            background-color: #4CAF50; /* Green background */
+            border: none; /* Remove borders */
+            color: #00aeef; /* White text */
+            padding: 12px 16px; /* Some padding */
+            font-size: 35px /* Set a font size */
+        }
+    </style>
+    <script>
+        /*  window.onload = function any_function_name() {
+              var prueba = '';
+
+              function removerFila(elemento) {
+                  console.log("click");
+                  console.log(this);
+
+                  var fila = this.parentNode.parentNode;
+                  var tabla = fila.parentNode;
+                  tabla.removeChild(fila);
+              }
+
+
+              function agregarFila() {
+                  var select = document.createElement("select");
+                  select.setAttribute("class", "styled-select slate");
+
+                  var options = "[[${fill_select}]]";
+                  options = options.replace("{", "");
+                  options = options.replace("}", "");
+                  options = options.replace(" ", "");
+                  var op = options.split(",");
+
+                  op.forEach(function (strOption) {
+                      var option = document.createElement("option");
+                      opcion_ = strOption.split("=");
+                      option.text = opcion_[1];
+                      option.value = opcion_[1];
+                      select.add(option);
+
+                  });//finaliza Creación de Select.
+
+
+                  //Removiendo el boton agregar
+                  var padre = this.parentNode;
+                  var btn = padre.removeChild(this);
+
+                  //agregando select creando boton para eliminar select.
+                  padre.appendChild(select);
+              }
+
+              //Este Botón Agrega  Filas Dentro de una Tabla.
+              document.getElementById("btnAddFlujo").addEventListener("click", function () {
+
+                  var tbFlujo = document.getElementById("tbFlujo");
+
+                  // creando select
+                  var select = document.createElement("select");
+                  select.setAttribute("class", "styled-select slate");
+                  select.id = 'select' + incremento;
+
+
+                  var options = "[[${fill_select}]]";
+                  options = options.replace("{", "");
+                  options = options.replace("}", "");
+                  options = options.replace(" ", "");
+                  var op = options.split(",");
+
+                  op.forEach(function (strOption) {
+                      var option = document.createElement("option");
+                      var opcion_ = strOption.split("=");
+                      option.text = opcion_[1];
+                      option.value = opcion_[1];
+                      select.add(option);
+                  });
+                  //finaliza creación de select.
+
+
+                  //creando  th1 -> celda A
+                  var th1 = document.createElement("th");
+                  th1.appendChild(select);
+
+                  //creando th2-> celda B
+                  var th2 = document.createElement("th");
+
+                  //creando botones  para agregar fila/remover fila
+                  var btnAgregar = document.createElement("a");
+                  btnAgregar.className = "btn btn-primary btn-circle btnAdd";
+                  btnAgregar.text = "+";
+                  btnAgregar.addEventListener("click", agregarFila);
+
+
+                  var btnEliminar = document.createElement("a");
+                  btnEliminar.className = "btn btn-danger btn-circle btnRowRemove";
+                  btnEliminar.addEventListener("click", removerFila);
+                  btnEliminar.text = "-";
+
+                  th2.appendChild(btnAgregar);
+                  th2.appendChild(btnEliminar);
+
+
+                  var tr = document.createElement("tr");
+                  tr.appendChild(th1);
+                  tr.appendChild(th2);
+
+                  tbFlujo.appendChild(tr);
+
+              });
+
+
+              document.querySelectorAll(".btn").forEach(function (element) {
+                  //btnClicks(element);
+              });
+
+
+              document.querySelectorAll(".btnRowRemove").forEach(function (element) {
+                  element.addEventListener("click", removerFila);
+
+              });
+
+              document.querySelectorAll(".btnRowAdd").forEach(function (element) {
+                  element.addEventListener("click", agregarFila);
+
+              });
+
+              document.getElementById("btnFinalizar").addEventListener("click", function () {
+                  //Node.childNodes  devuelve una colección de hijos nodes del elemento dado donde el primer nodo hijo es asignado un índice .
+                  alert('Esta entrando');
+                  var tBody = document.getElementById("tbFlujo");
+                  var nodosFilas = tBody.childNodes;
+                  var noFila = 0;
+                  var registros = new Object();
+                  registros.flujos = [];
+                  var dependencias = "null";
+
+
+                  nodosFilas.forEach(function (eFila) {
+                      if (eFila.nodeName == "TR") {
+                          var noColumna = 0;
+                          noFila++;
+                          var nodosColumnas = eFila.childNodes;
+
+
+                          var dependenciaTemp = [];
+                          nodosColumnas.forEach(function (eColumna) {
+                              if (eColumna.nodeName == "TH") {
+                                  noColumna++;
+
+
+                                  var nodosInput = eColumna.childNodes;
+                                  nodosInput.forEach(function (elemento) {
+                                      if (elemento.nodeName == "SELECT") {
+                                          var obj = new Object();
+                                          obj.name = document.getElementById('Text2').value;
+                                          obj.coordinator = elemento.value;
+                                          obj.posicion = noFila;
+                                          obj.col = noColumna;
+                                          obj.max = document.getElementById("tbFlujo").querySelectorAll("TR").length;
+                                          dependenciaTemp.push(elemento.value);
+                                          registros.flujos.push(obj);
+                                          obj.dependencia = dependencias;
+
+
+                                          prueba = prueba + obj.name + ',' + obj.coordinator + ',' + obj.posicion + ',' + obj.dependencia + ',' + obj.max + ',' + obj.col + ';';
+                                          console.log(prueba);
+                                          //  alert(prueba);
+                                          document.getElementById('cadena').value = prueba;
+                                      }
+
+                                  });
+
+                                  if (noColumna == 2) {
+                                      dependencias = dependenciaTemp.join("|");
+
+                                  }
+                              }
+                          });
+
+                      }
+                  });
+
+                  registros.flujos.forEach(function (item) {
+                      item.max = noFila;
+                      console.log(item.max);
+                      // alert(item.max);
+                  });
+              });
+          }*/
+    </script>
+    <script>
+        function crearTabla() {
+            var prueba = ''; //variable que contiene la cadena de String formada por los Datos que se guardaran
+            var cadena = document.getElementById("cadena").value;
+
+
+            if (cadena.length !== 0) {
+                var nuevaCadena = cadena.slice(0, -1);
+                var splitCadena = nuevaCadena.split(";");
+                var fila_actual = 0;
+                var fila;
+                var tbl = document.getElementById("mi-tabla");
+                var tblBody = document.getElementById("tbFlujo");
+
+
+                for (var i = 0 in splitCadena) {
+                    var splitElemento = splitCadena[i].split(",");
+
+                    var f = splitElemento[2];
+                    if (fila_actual === 0 || fila_actual !== f) {
+                        fila = document.createElement("tr");
+                    }
+
+                    var celda = document.createElement("td");
+                    var celda2 = document.createElement("td");
+
+                    //creando botones  para agregar fila/remover fila
+                    var btnAgregar = document.createElement("a");
+                    btnAgregar.className = "btn btn-primary btn-circle btnAdd";
+                    btnAgregar.text = "+";
+                    btnAgregar.addEventListener("click", agregarFila);
+
+                    var btnEliminar = document.createElement("a");
+                    btnEliminar.className = "btn btn-danger btn-circle btnRowRemove";
+                    btnEliminar.addEventListener("click", removerFila);
+                    btnEliminar.text = "-";
+
+                    var flag = false;
+                    if (splitElemento[5] === '2') {
+                        celda2.appendChild(btnEliminar);
+                    } else {
+                        if (i < splitCadena.length - 1) {
+                            var j = parseInt(i) + 1;
+                            var temp = splitCadena[j].split(',');
+                            // alert(temp);
+                            if (temp[5] === '1') {
+                                celda2.appendChild(btnAgregar);
+                                celda2.appendChild(btnEliminar);
+                                flag = true;
+                            }
+                        } else {
+                            celda2.appendChild(btnAgregar);
+                            celda2.appendChild(btnEliminar);
+                            flag = true;
+                        }
+                    }
+
+
+                    var select = document.createElement("select");
+                    select.setAttribute("id", "soflow");
+
+                    var options = "[[${fill_select}]]";
+                    options = options.replace("[", "");
+                    options = options.replace("]", "");
+                    options = options.replace(" ", "");
+                    var op = options.split(",");
+
+                    op.forEach(function (strOption) {
+                        var option = document.createElement("option");
+                        var opcion_ = strOption.split("=");
+                        option.text = opcion_[0];
+                        option.value = opcion_[0].trim().replace(" ", "");
+                        select.add(option);
+
+                        fila_actual = splitElemento[2];
+                    });
+
+
+                    function busquedaBinaria(options, dato) {
+                        var inicio = 0;
+                        var pos;
+                        var fin = options.length - 1;
+
+                        while (inicio <= fin) {
+                            pos = Math.floor((inicio + fin) / 2);
+                            if (options[pos].trim().toUpperCase().localeCompare(dato.trim().toUpperCase()) === 0) {
+                                return pos;
+                            } else if (options[pos].trim().toUpperCase().localeCompare(dato.trim().toUpperCase()) === -1) {
+                                inicio = pos + 1;
+                            } else {
+                                fin = pos - 1;
+                            }
+                        }
+
+                        return -1;
+                    }
+
+
+                    var posicion = busquedaBinaria(op, splitElemento[1].replace(" ", "").trim());
+                    select.selectedIndex = posicion;
+                    //  alert(posicion+ '|' +splitElemento[1]);
+
+
+                    if (splitElemento[5] === '1') {
+                        celda.appendChild(select);
+                        fila.appendChild(celda);
+                        if (flag === true) {
+                            fila.appendChild(celda2);
+                        }
+
+                    } else {
+                        celda2.appendChild(select);
+                        fila.appendChild(celda2);
+
+                    }
+
+                    tblBody.appendChild(fila);
+                    tbl.appendChild(tblBody);
+                }
+            } else {
+
+
+
+                <!-- termina validacion si cadena no es null o vacío-->
+
+
+                var valores = "[[${getDependences}]]";//variable que contiene las depencencias pertenecientes a un flujo
+                var valores2 = valores.replace("[", "").replace("]", "").replace(" ", "");
+                var valoresSplit = valores2.split(',');
+
+                var fila_actual = 0;
+                var fila;
+
+                var tbl = document.getElementById("mi-tabla");
+                var tblBody = document.getElementById("tbFlujo");
+
+                for (var i = 0 in valoresSplit) {
+                    var valoresSplit2 = valoresSplit[i].split(";");
+
+                    var f = valoresSplit2[1];
+                    if (fila_actual === 0 || fila_actual !== f) {
+                        fila = document.createElement("tr");
+                    }
+
+
+                    var celda = document.createElement("td");
+                    var celda2 = document.createElement("td");
+
+                    //creando botones  para agregar fila/remover fila
+                    var btnAgregar = document.createElement("a");
+                    btnAgregar.className = "btn btn-primary btn-circle btnAdd";
+                    btnAgregar.text = "+";
+                    btnAgregar.addEventListener("click", agregarFila);
+
+                    var btnEliminar = document.createElement("a");
+                    btnEliminar.className = "btn btn-danger btn-circle btnRowRemove";
+                    btnEliminar.addEventListener("click", removerFila);
+                    btnEliminar.text = "-";
+
+
+                    var flag = false;
+                    if (valoresSplit2[2] === '2') {
+                        celda2.appendChild(btnEliminar);
+                    } else {
+                        if (i < valoresSplit.length - 1) {
+                            var j = parseInt(i) + 1;
+
+                            var temp = valoresSplit[j].split(';');
+                            //  alert(temp);
+                            if (temp[2] === '1') {
+                                celda2.appendChild(btnAgregar);
+                                celda2.appendChild(btnEliminar);
+                                flag = true;
+                            }
+                        } else {
+                            celda2.appendChild(btnAgregar);
+                            celda2.appendChild(btnEliminar);
+                            flag = true;
+                        }
+                    }
+
+
+                    var select = document.createElement("select");
+                    select.setAttribute("id", "soflow");
+
+                    var options = "[[${fill_select}]]";
+                    options = options.replace("[", "");
+                    options = options.replace("]", "");
+                    options = options.replace(" ", "");
+                    options = options.replace("\n", "");
+                    var op = options.split(",");
+
+
+                    op.forEach(function (strOption) {
+                        var option = document.createElement("option");
+                        var opcion_ = strOption.split("=");
+                        option.text = opcion_[0];
+                        option.value = opcion_[0].trim().replace(" ", "");
+                        select.add(option);
+
+                        fila_actual = valoresSplit2[1];
+                    });
+
+
+                    function busquedaBinaria(options, dato) {
+                        var inicio = 0;
+                        var pos;
+                        var fin = options.length - 1;
+
+                        while (inicio <= fin) {
+                            pos = Math.floor((inicio + fin) / 2);
+                            if (options[pos].trim().toUpperCase().localeCompare(dato.trim().toUpperCase()) === 0) {
+                                return pos;
+                            } else if (options[pos].trim().toUpperCase().localeCompare(dato.trim().toUpperCase()) === -1) {
+                                inicio = pos + 1;
+                            } else {
+                                fin = pos - 1;
+                            }
+                        }
+
+                        return -1;
+                    }
+
+
+                    var posicion = busquedaBinaria(op, valoresSplit2[0].replace(" ", "").trim());
+                    select.selectedIndex = posicion;
+
+
+                    if (valoresSplit2[2] === '1') {
+                        celda.appendChild(select);
+                        fila.appendChild(celda);
+                        if (flag === true) {
+                            fila.appendChild(celda2);
+                        }
+
+                    } else {
+                        celda2.appendChild(select);
+                        fila.appendChild(celda2);
+
+                    }
+
+                    tblBody.appendChild(fila);
+                    tbl.appendChild(tblBody);
+
+
+                    // Aqui empezé a hacer cambios
+                    document.querySelectorAll(".btn").forEach(function (element) {
+                    });
+                    document.querySelectorAll(".btnRowRemove").forEach(function (element) {
+                        element.addEventListener("click", removerFila);
+                    });
+                    document.querySelectorAll(".btnRowAdd").forEach(function (element) {
+                        element.addEventListener("click", agregarFila);
+
+                    });
+                }
+
+
+            }//llave que cierra el else
+            //Este Botón Agrega  Filas Dentro de una Tabla.
+            document.getElementById("btnAddFlujo").addEventListener("click", function () {
+                var tbFlujo = document.getElementById("tbFlujo");
+
+                //Creando elemento Select
+                var select = document.createElement("select");
+                select.setAttribute("id", "soflow");
+
+                var options = "[[${fill_select}]]";
+                options = options.replace("[", "");
+                options = options.replace("]", "");
+                options = options.replace(" ", "");
+                var op = options.split(",");
+
+                op.forEach(function (strOption) {
+                    var option = document.createElement("option");
+                    var opcion_ = strOption.split("=");
+                    option.text = opcion_[0];
+                    option.value = opcion_[0].trim().replace(" ", "");
+                    select.add(option);
+
+                });
+
+                //creando  th1 -> celda A
+                var th1 = document.createElement("th");
+                th1.appendChild(select);
+
+                //creando th2-> celda B
+                var th2 = document.createElement("th");
+
+                //creando botones  para agregar fila/remover fila
+                var btnAgregar = document.createElement("a");
+                btnAgregar.className = "btn btn-primary btn-circle btnAdd";
+                btnAgregar.text = "+";
+                btnAgregar.addEventListener("click", agregarFila);
+
+                var btnEliminar = document.createElement("a");
+                btnEliminar.className = "btn btn-danger btn-circle btnRowRemove";
+                btnEliminar.addEventListener("click", removerFila);
+                btnEliminar.text = "-";
+
+                th2.appendChild(btnAgregar);
+                th2.appendChild(btnEliminar);
+
+                var tr = document.createElement("tr");
+                tr.appendChild(th1);
+                tr.appendChild(th2);
+
+                tbFlujo.appendChild(tr);
+            });
+
+
+            document.getElementById("btnFinalizar").addEventListener("click", function () {
+                //Node.childNodes  devuelve una colección de hijos nodes del elemento dado donde el primer nodo hijo es asignado un índice .
+                var tBody = document.getElementById("tbFlujo");
+                var nodosFilas = tBody.childNodes;
+                var noFila = 0;
+                var registros = new Object();
+                registros.flujos = [];
+                var dependencias = "null";
+
+
+                nodosFilas.forEach(function (eFila) {
+                    if (eFila.nodeName == "TR") {
+                        var noColumna = 0;
+                        noFila++;
+                        var nodosColumnas = eFila.childNodes;
+
+
+                        var dependenciaTemp = [];
+                        nodosColumnas.forEach(function (eColumna) {
+                            if (eColumna.nodeName == "TD" || eColumna.nodeName == "TH") {
+                                noColumna++;
+
+
+                                var nodosInput = eColumna.childNodes;
+                                nodosInput.forEach(function (elemento) {
+                                    if (elemento.nodeName == "SELECT") {
+                                        var obj = new Object();
+                                        obj.name = document.getElementById('nombre').value;
+                                        obj.coordinator = elemento.value;
+                                        obj.posicion = noFila;
+                                        obj.col = noColumna;
+                                        obj.max = document.getElementById("tbFlujo").querySelectorAll("TR").length;
+                                        dependenciaTemp.push(elemento.value);
+                                        registros.flujos.push(obj);
+                                        obj.dependencia = dependencias;
+
+
+                                        prueba = prueba + obj.name + ',' + obj.coordinator + ',' + obj.posicion + ',' + obj.dependencia + ',' + obj.max + ',' + obj.col + ';';
+                                        // console.log(prueba);
+                                        //alert(prueba);
+                                        document.getElementById('cadena').value = prueba;
+                                    }
+
+                                });
+
+                                if (noColumna == 2) {
+                                    dependencias = dependenciaTemp.join("|");
+
+                                }
+                            }
+                        });
+
+                    }
+                });
+
+                registros.flujos.forEach(function (item) {
+                    item.max = noFila;
+                    console.log(item.max);
+                    // alert(item.max);
+                });
+            });
+
+
+        }
+
+        function removerFila(elemento) {
+            console.log("click");
+            console.log(this);
+
+            var fila = this.parentNode.parentNode;
+            var tabla = fila.parentNode;
+            tabla.removeChild(fila);
+        }
+
+        function agregarFila() {
+            //Creando elemento Select
+            var select = document.createElement("select");
+            select.setAttribute("id", "soflow");
+
+            var options = "[[${fill_select}]]";
+            options = options.replace("[", "");
+            options = options.replace("]", "");
+            options = options.replace(" ", "");
+            var op = options.split(",");
+
+
+            op.forEach(function (strOption) {
+                var option = document.createElement("option");
+                var opcion_ = strOption.split("=");
+                option.text = opcion_[0];
+                option.value = opcion_[0].trim().replace(" ", "");
+                select.add(option);
+
+            });
+
+
+            //Removiendo el boton agregar
+            var padre = this.parentNode;
+            var btn = padre.removeChild(this);
+
+            //agregando select creando boton para eliminar select.
+            padre.appendChild(select);
+        }
+    </script>
+</head>
+
+<body onload="crearTabla()">
+<div class="right_col" role="main" data-layout-fragment="content">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="height: 50px;">
+                                    <h3>Dependencia
+                                        <small>/ datos del flujo
+                                        </small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="x_content">
+
+
+                            <!--Inica Mensaje de Alertas-->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div data-th-if="${message}" class="alert alert-danger">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                        ×
+                                    </button>
+                                    <span class="glyphicon glyphicon-exclamation-sign"></span> <strong>Error
+                                </strong>
+                                    <hr class="message-inner-separator">
+                                    <p data-th-text="${message}"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div data-th-if="${messageValidation}" class="alert alert-danger">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                        ×
+                                    </button>
+                                    <span class="glyphicon glyphicon-exclamation-sign"></span> <strong>Error
+                                </strong>
+                                    <hr class="message-inner-separator">
+                                    <ul>
+                                        <li data-th-each="validation : ${validations}"
+                                            data-th-text="${validation}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!--Fin Alertas-->
+
+                            <!--Inicia Formulario .-->
+                            <form id="demo-form2" data-parsley-validate
+                                  data-th-action="@{/dependencies/saveChanges}"
+                                  data-th-object="${bundles}"
+                                  method="post"
+                                  class="form-horizontal form-label-left">
+
+
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="hidden" id="bundles_id" required="required"
+                                               class="form-control col-md-7 col-xs-12"
+                                               readonly="readonly" name="bundles_id"
+                                               data-th-field="*{bundle_id}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nombre">Nombre
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="nombre" name="nombre"
+                                               data-th-field="*{nombre}"
+                                               placeholder="Nombre del flujo"
+                                               required="required"
+                                               autocomplete="off"
+                                               readonly="readonly"
+                                               class="form-control col-md-7 col-xs-12"/>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="minuto">Minuto
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="minuto" name="minuto"
+                                               data-th-field="*{minuto}"
+                                               placeholder="Minuto a ejecutar el proceso"
+                                               class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hora">Hora
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="hora" name="hora"
+                                               data-th-field="*{hora}"
+                                               placeholder="Hora a ejecutar el proceso"
+                                               class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                           for="diaSemana">Día
+                                        de la
+                                        semana
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="diaSemana" name="diaSemana"
+                                               placeholder="Día de la semana a ejecutar el proceso"
+                                               data-th-field="*{diaSemana}"
+                                               class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mes">Mes
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="mes" name="mes"
+                                               data-th-field="*{mes}"
+                                               placeholder="Mes a ejecutar el proceso"
+                                               class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="diaMes">Día
+                                        del
+                                        mes
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="diaMes" name="diaMes"
+                                               placeholder="Día del mes a ejecutar el proceso"
+                                               data-th-field="*{diaMes}"
+                                               class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha de inicio
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="date" name="fecha_inicio"
+                                               placeholder="Fecha de inicio a ejecutar el proceso"
+                                               data-th-field="*{fecha_inicio}"
+                                               class="form-control col-md-7 col-xs-6">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha de
+                                        finalización</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="date" name="fecha_fin"
+                                               placeholder="Fecha de finalización de ejecución del proceso"
+                                               data-th-field="*{fecha_fin}"
+                                               class="form-control col-md-7 col-xs-6">
+                                    </div>
+                                </div>
+                                <input type="hidden" id="cadena" class="form-control"
+                                       data-th-field="*{cadena}"/>
+
+                                <!--div class="pull-right">
+                                    <button
+                                            id="btnFinalizar"
+                                            type="submit"
+                                            class="btn btn-success">Guardar
+                                    </button>
+                                </div>
+                            </form-->
+
+
+                                <h4> &nbsp;&nbsp;
+                                    Editando Dependencias
+                                    <small>/ a un flujo</small>
+                                </h4>
+
+                                <!--Inicia tabla que contiene Select-->
+                                <table class="table is-bordered is-fullwidth" id="mi-tabla">
+                                    <thead>
+                                    <td>Seleccione Dependencias:</td>
+                                    </thead>
+
+                                    <tbody id="tbFlujo"></tbody>
+
+                                    <tfoot>
+                                    <tr>
+                                        <th colspan="2">
+                                            <a class="btn btn-primary btn-circle" id="btnAddFlujo">+</a>
+                                        </th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+
+                                <div class="pull-right">
+                                    <button
+                                            id="btnFinalizar"
+                                            type="submit"
+                                            data-toggle="modal"
+                                            data-target=".bs-example-modal-sm"
+                                            style="width: 75px"
+                                            class="btn btn-success">Crear
+                                    </button>
+                                </div>
+                            </form>
+                            <!--Finaliza Formulario-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--Modal que Despliga Indicador de Espera-->
+            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <span style="font-size: 35px; color: #00aeef" class="fa fa-spinner fa-spin"></span>
+                            <strong>Cargando...</strong>
+                            <!--div class="jumbotron">
+                                <span style="font-size: 35px"
+                                      class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                                <strong>Wait until the configuration is done...</strong>
+                            </div-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Fin Modal-->
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit-icons.min.js"></script>
+
+</body>
+</html>

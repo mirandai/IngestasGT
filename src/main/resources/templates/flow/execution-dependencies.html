@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}" xmlns:th=http://www.thymeleaf.org>
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+    <title>Dependencies Monitor</title>
+    <script>
+
+        function crearTabla() {
+            var valores = "[[${getDep_flows}]]";//devuelve Coordinator, posicion,col
+
+            var valores2 = valores.replace("[", "").replace("]", "");
+            var valoresSplit = valores2.split(',');
+
+            var fila_actual = 0;
+            var fila;
+
+            var tbl = document.getElementById("tabla");
+            var tblBody = document.createElement("tbody");
+
+            for (var i = 0 in valoresSplit) {
+                var valoresSplit2 = valoresSplit[i].split(';');
+
+                var f = valoresSplit2[1];
+                if (fila_actual === 0 || fila_actual !== f) {
+                    fila = document.createElement("tr");
+
+                }
+
+                <!--Agregando status a cada fila-->
+                var status = valoresSplit2[3];
+                var span = document.createElement("span");
+                span.innerHTML = status;
+
+                if (status === 'RUNNING') {
+                    span.setAttribute("class", "label label-primary label-xs");
+                }
+                if (status === 'WAITING') {
+                    span.setAttribute("class", "label label-warning");
+                }
+                if (status === 'SUCCEDEED_ALERT') {
+                    span.setAttribute("class", "label label-warning label-xs");
+                }
+                if (status === 'SUCCEEDED') {
+                    span.setAttribute("class", "label label-success label-xs");
+                }
+                if (status === 'KILLED') {
+                    span.setAttribute("class", "label label-danger label-xs");
+                }
+                if (status === 'FAILED') {
+                    span.setAttribute("class", "label label-danger label-xs");
+                }
+                if (status === 'SUSPEND') {
+                    span.setAttribute("class", "label label-danger label-xs");
+                }
+                <!--Fin-->
+                if (status !== 'WAITING') {
+
+                    var celda = document.createElement("td");
+                    var celda1 = document.createElement("td");
+                    var celda2 = document.createElement("td");
+                    var celda3 = document.createElement("td");
+
+                    celda1.setAttribute("style", "text-align: left;");
+                    celda2.setAttribute("style", "text-align: left;");
+                    celda3.setAttribute("style", "text-align: left;");
+
+                    var textoCelda = document.createTextNode(valoresSplit2[0] + '');
+                    var f_inicio = document.createTextNode(valoresSplit2[4]);
+                    var f_fin = document.createTextNode(valoresSplit2[5]);
+
+                    celda.appendChild(textoCelda);
+                    celda1.appendChild(span);
+                    celda2.appendChild(f_inicio);
+                    celda3.appendChild(f_fin);
+
+                    fila.appendChild(celda);
+                    fila.appendChild(celda2);
+                    fila.appendChild(celda3);
+                    fila.appendChild(celda1);
+
+                    tblBody.appendChild(fila);
+                    fila_actual = valoresSplit2[1];
+                } else {
+                    var celda = document.createElement("td");
+                    var celda1 = document.createElement("td");
+
+                    celda1.setAttribute("style", "text-align: left;");
+
+                    var textoCelda = document.createTextNode(valoresSplit2[0] + '');
+                    celda.appendChild(textoCelda);
+                    celda1.appendChild(span);
+
+                    fila.appendChild(celda);
+                    fila.appendChild(celda1);
+
+                    tblBody.appendChild(fila);
+                    fila_actual = valoresSplit2[1];
+
+                }
+
+            }
+            tbl.appendChild(tblBody);
+            tbl.setAttribute("border", "0");
+
+        }
+    </script>
+
+</head>
+<body onload="crearTabla()">
+<div class="right_col" role="main" data-layout-fragment="content">
+
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3></h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="height: 50px;">
+                                <h4>Monitor Dependencias
+                                    <small></small>
+                                </h4>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+                                    <h3>Orden de Ejecución
+                                        <small>de los Flujos</small>
+                                    </h3>
+                                    <hr/>
+
+                                    <!--table id="tabla" class="table table-bordered table-striped table-hover"-->
+                                    <div class="table-responsive">
+                                        <!--table id="tabla" class="uk-table uk-table-striped"-->
+                                        <table id="tabla" class="uk-table uk-table-divider">
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/js/uikit-icons.min.js"></script>
+</body>
+</html>

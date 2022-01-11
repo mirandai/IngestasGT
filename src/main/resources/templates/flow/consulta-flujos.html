@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}" xmlns:th=http://www.thymeleaf.org>
+<head>
+    <title>Buscar en el contenido de una tabla</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+    <script language="javascript">
+        function doSearch() {
+            var tableReg = document.getElementById('datos');
+            var searchText = document.getElementById('searchTerm').value.toLowerCase();
+            var cellsOfRow = "";
+            var found = false;
+            var compareWith = "";
+
+            // Recorremos todas las filas con contenido de la tabla
+            for (var i = 1; i < tableReg.rows.length; i++) {
+                cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
+                found = false;
+                // Recorremos todas las celdas
+                for (var j = 0; j < cellsOfRow.length && !found; j++) {
+                    compareWith = cellsOfRow[j].innerHTML.toLowerCase();
+                    // Buscamos el texto en el contenido de la celda
+                    if (searchText.length == 0 || (compareWith.indexOf(searchText) > -1)) {
+                        found = true;
+                    }
+                }
+                if (found) {
+                    tableReg.rows[i].style.display = '';
+                } else {
+                    // si no ha encontrado ninguna coincidencia, esconde la
+                    // fila de la tabla
+                    tableReg.rows[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
+
+</head>
+<body>
+<div class="panel panel-default">
+    <div class="panel-body"></div>
+    <div class="right_col" role="main" data-layout-fragment="content">
+        <div class="">
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="height: 50px;">
+                                        <h3>Consultar
+                                            <small>flujos</small>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                </div>
+                            </div>
+                            <!--tabla-->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <form>
+                                    Campo a Buscar:
+                                    <input id="searchTerm" class="form-control" type="text" style="width: 300px"
+                                           onkeyup="doSearch()"/>
+                                </form>
+                                <div class="table-responsive">
+                                    <table id="datos" class="uk-table uk-table-divider">
+
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Descripción</th>
+                                            <th>Tipo</th>
+                                            <th>País</th>
+                                            <th>Id Conexión</th>
+                                            <th>Conexión</th>
+                                            <th>Nombre Archivo</th>
+                                            <th>Frecuencia</th>
+                                            <th>Fecha Inicio</th>
+                                            <th>Fecha Fin</th>
+                                            <th>% Tolerancia</th>
+                                            <th>Alerta por Correo</th>
+                                            <th>Correo Electronico</th>
+                                            <th>Destino Salida</th>
+                                            <th>Directorio</th>
+                                            <th>Sobrescribir Destino</th>
+                                            <th>Esquema de Base de Datos</th>
+                                            <th>Tabla</th>
+                                            <th>Mappers</th>
+                                            <th>Tamaño de Tabla</th>
+                                            <th>Partición</th>
+                                            <th>Campo Particionado</th>
+                                            <th>Cola</th>
+                                        </tr>
+
+                                        <tr data-th-each="flows :  ${flowsList}">
+                                            <td data-th-text="${flows.name}"></td>
+                                            <td data-th-text="${flows.description}"></td>
+                                            <td data-th-text="${flows.type}"></td>
+                                            <td data-th-text="${flows.country}"></td>
+                                            <td data-th-text="${flows.connectionId}"></td>
+                                            <td data-th-text="${connectionList.get(flows.connectionId)}"></td>
+                                            <td data-th-text="${flows.filename}"></td>
+                                            <td data-th-text="${flows.hour}+ ' ' +${flows.minute}+ ' ' +${flows.weekday} +' '+${flows.month}+' '+${flows.monthday}"></td>
+                                            <td data-th-text="${flows.startDate}"></td>
+                                            <td data-th-text="${flows.endDate}"></td>
+                                            <td data-th-text="${flows.percentageToleranceRecords}"></td>
+                                            <td>
+                                                <div th:switch="${flows.alertByEmail}">
+                                                    <p th:case="false">
+                                                        <label>No
+                                                        </label>
+                                                    </p>
+                                                    <p th:case="true">
+                                                        <label>Si
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td data-th-text="${flows.emails}"></td>
+                                            <td data-th-text="${flows.isDirectory}"></td>
+                                            <td data-th-text="${flows.directory}"></td>
+                                            <td>
+                                                <div th:switch="${flows.override}">
+                                                    <p th:case="false">
+                                                        <label>No
+                                                        </label>
+                                                    </p>
+                                                    <p th:case="true">
+                                                        <label>Si
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td data-th-text="${flows.schemaDatabase}"></td>
+                                            <td data-th-text="${flows.tablename}"></td>
+                                            <td data-th-text="${flows.mappers}"></td>
+                                            <td data-th-text="${flows.tableSize}"></td>
+                                            <td>
+                                                <div th:switch="${flows.particioned}">
+                                                    <p th:case="false">
+                                                        <label>No
+                                                        </label>
+                                                    </p>
+                                                    <p th:case="true">
+                                                        <label>Si
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td data-th-text="${flows.particionedField}"></td>
+                                            <td>
+                                                <label th:if="${flows.queue}"
+                                                       th:text="${flows.queue}"></label>
+                                                <label th:if="${flows.queueSqoop}"
+                                                       th:text="${flows.queueSqoop}"></label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <!--/tabla-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

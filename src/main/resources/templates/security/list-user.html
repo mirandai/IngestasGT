@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{fragments/layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/static/css/profile.min.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.24/css/uikit.min.css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>Listado de usuario</title>
+
+    <script language="javascript">
+        function doSearch() {
+            var tableReg = document.getElementById('datos');
+            var searchText = document.getElementById('searchTerm').value.toLowerCase();
+            var cellsOfRow = "";
+            var found = false;
+            var compareWith = "";
+
+            // Recorremos todas las filas con contenido de la tabla
+            for (var i = 1; i < tableReg.rows.length; i++) {
+                cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
+                found = false;
+                // Recorremos todas las celdas
+                for (var j = 0; j < cellsOfRow.length && !found; j++) {
+                    compareWith = cellsOfRow[j].innerHTML.toLowerCase();
+                    // Buscamos el texto en el contenido de la celda
+                    if (searchText.length == 0 || (compareWith.indexOf(searchText) > -1)) {
+                        found = true;
+                    }
+                }
+                if (found) {
+                    tableReg.rows[i].style.display = '';
+                } else {
+                    // si no ha encontrado ninguna coincidencia, esconde la
+                    // fila de la tabla
+                    tableReg.rows[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+<div class="right_col" role="main" data-layout-fragment="content">
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="height: 50px;">
+                            <h3>Listado
+                                <small>/Seleccionar usuario a modificar ó borrar</small>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+
+
+                <!--tabla-->
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-9">
+
+                        <table id="datos" class="uk-table uk-table-divider">
+                            <input id="searchTerm" class="form-control" type="text" style="width: 300px"
+                                   autocomplete="off" onkeyup="doSearch()" placeholder="Campo a buscar..."/>
+
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Usuario</th>
+                                <th>Nombre</th>
+                                <th><span class="glyphicon glyphicon-cog"></span> Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-th-each="user : ${userList}">
+                                <th th:text="${user.id}"></th>
+                                <td data-th-text="${user.username}"></td>
+                                <td data-th-text="${user.name}"></td>
+                                <td>
+                                    <a data-th-href="@{/users/edit(id=${user.id})}"
+                                       data-toggle="tooltip" title="Editar">
+                                        <i class="glyphicon glyphicon-trash fa fa-pencil-square-o"></i>
+                                    </a>&nbsp;&nbsp;&nbsp;
+                                    <a data-th-href="@{/users/delete(id=${user.id})}"
+                                       data-toggle="tooltip" title="Eliminar">
+                                        <i class="glyphicon glyphicon-trash fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <!--tabla-->
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
